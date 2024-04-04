@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Warren Kennedy",
+    "section": "",
+    "text": "Welcome to my website!\nI’m a graduate student in the Rady School of Management at UC San Diego."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "Warren Kennedy’s Resume",
+    "section": "",
+    "text": "Download PDF file."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "My Projects",
+    "section": "",
+    "text": "Homework 1\n\n\n\n\n\n\nWarren Kennedy\n\n\nApr 3, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/project1/index.html",
+    "href": "projects/project1/index.html",
+    "title": "Homework 1",
+    "section": "",
+    "text": "I like to plot data\n\n\nI also analyze data"
+  },
+  {
+    "objectID": "projects/project1/index.html#sub-header",
+    "href": "projects/project1/index.html#sub-header",
+    "title": "Homework 1",
+    "section": "",
+    "text": "I also analyze data"
+  }
+]

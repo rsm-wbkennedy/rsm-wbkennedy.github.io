@@ -1,0 +1,16 @@
+---
+title: "Warren Kennedy"
+image: "files/profile-pic.jpg"
+
+about: 
+  template: jolla
+  links: 
+    - icon: envelope
+      href: mailto:warren.kennedy@rady.ucsd.edu
+    - icon: linkedin
+      href: https://www.linkedin.com/in/warrenb-kennedy
+---
+
+Welcome to my website!
+
+I'm a graduate student in the Rady School of Management at UC San Diego.
