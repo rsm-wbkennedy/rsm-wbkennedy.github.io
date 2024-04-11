@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Warren Kennedy",
     "section": "",
-    "text": "Welcome to my website!\nI’m a graduate student in the Rady School of Management at UC San Diego."
+    "text": "Warren Kennedy is an Operations Analyst at Midland Credit Management, an Encore Capital Group subsidiary. When not innovating on data platforms, Warren enjoys watching sports, walking his dogs, and overpaying for popcorn at movie theatres.\n\nEducation\nUC San Diego Rady School of Management | San Diego, CA\n\nMaster of Science in Business Analytics | August 2023 - December 2024\nBachelor of Arts in Economics | September 2021 - June 2023\n\n\n\nExperience\nMidland Credit Management | Operations Analyst | August 2023 - Present"
   },
   {
     "objectID": "about.html",
@@ -25,7 +25,7 @@
     "href": "projects.html",
     "title": "My Projects",
     "section": "",
-    "text": "Homework 1\n\n\n\n\n\n\nWarren Kennedy\n\n\nApr 9, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "No matching items"
   },
   {
     "objectID": "projects/project1/index.html",
@@ -40,5 +40,12 @@
     "title": "Homework 1",
     "section": "",
     "text": "I also analyze data"
+  },
+  {
+    "objectID": "index.html#sub-header",
+    "href": "index.html#sub-header",
+    "title": "Warren Kennedy",
+    "section": "Sub-Header",
+    "text": "Sub-Header"
   }
 ]

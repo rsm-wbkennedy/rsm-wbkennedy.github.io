@@ -1,9 +1,11 @@
 ---
 title: "Warren Kennedy"
-image: "files/profile-pic.jpg"
+image: "files/profile-pic2.jpg"
 
 about: 
-  template: jolla
+  id: hero-heading
+  template: trestles
+  image-shape: round
   links: 
     - icon: envelope
       href: mailto:warren.kennedy@rady.ucsd.edu
@@ -11,6 +13,17 @@ about:
       href: https://www.linkedin.com/in/warrenb-kennedy
 ---
 
-Welcome to my website!
+Warren Kennedy is an Operations Analyst at Midland Credit Management, an Encore Capital Group subsidiary. When not innovating on data platforms, Warren enjoys watching sports, walking his dogs, and overpaying for popcorn at movie theatres.
 
-I'm a graduate student in the Rady School of Management at UC San Diego.
+# Education
+
+**UC San Diego Rady School of Management** | San Diego, CA
+
+- Master of Science in Business Analytics | August 2023 - December 2024
+
+- Bachelor of Arts in Economics | September 2021 - June 2023
+
+
+# Experience
+
+**Midland Credit Management** | Operations Analyst | August 2023 - Present
