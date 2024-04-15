@@ -1,6 +1,6 @@
 ---
 title: "A Replication of Karlan and List (2007)"
-author: "Your Name"
+author: "Warren Kennedy"
 date: today
 callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 ---
@@ -25,7 +25,7 @@ The data used for this experiment has assigned roughly 2/3 of the individuals to
 ```{r}
 # read the data 
 library(haven)
-data <- read_dta("karlan_list_2007.dta")
+data <- read_dta("/home/jovyan/My_Quarto_Website/projects/project1/karlan_list_2007.dta")
 
 # summarize treatment/control split
 treatment_perc <- mean(data$treatment)
@@ -55,19 +55,6 @@ ask_counts <- data %>%
 print(ratio_counts)
 print(ask_counts)
 print(size_counts)
-
-```
-
-```{r}
-# Create a histogram for each numeric column using ggplot2
-lapply(names(data), function(col) {
-    if(is.numeric(data[[col]])) {
-        print(ggplot(data, aes_string(x = col)) + 
-              geom_histogram(bins = 20, fill = "blue", color = "black") +
-              ggtitle(paste("Histogram of", col)) +
-              theme_minimal())
-    }
-})
 
 ```
 
