@@ -323,6 +323,7 @@ airbnb_clean <- as.data.frame(lapply(airbnb, na_to_mode))
 
 #### Visualizing the Response Variable
 ```{r}
+library(ggplot2)
 ggplot(airbnb_clean, aes(x = airbnb_clean$number_of_reviews)) +
   geom_histogram()
 

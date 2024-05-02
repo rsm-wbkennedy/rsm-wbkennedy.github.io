@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Your Name">
+<meta name="author" content="Warren Kennedy">
 <meta name="dcterms.date" content="2024-05-02">
 
 <title>Warren’s Website - Poisson Regression Examples</title>
@@ -163,6 +163,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#airbnb-case-study" id="toc-airbnb-case-study" class="nav-link" data-scroll-target="#airbnb-case-study">AirBnB Case Study</a>
   <ul class="collapse">
   <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1">Introduction</a></li>
+  <li><a href="#data-1" id="toc-data-1" class="nav-link" data-scroll-target="#data-1">Data</a></li>
+  <li><a href="#modeling-the-data" id="toc-modeling-the-data" class="nav-link" data-scroll-target="#modeling-the-data">Modeling the data</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -182,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Your Name </p>
+             <p>Warren Kennedy </p>
           </div>
   </div>
     
@@ -210,12 +212,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
-<p><em>todo: Read in data.</em> To begin our analysis, we first need to read in the data.</p>
+<p>To begin our analysis, we first need to read in the data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>blueprinty <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"~/My_Quarto_Website/projects/project2/blueprinty.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><em>todo: Compare histograms and means of number of patents by customer status. What do you observe?</em> We want to use this ddata to provide insights as to whether or not firms using Blueprinty’s software are more successful in getting their patent applications approved. We first visualize our data to see if there is an obvious difference in the number of patens approved between customers and non-customers. The plot blow shows a roughly similar distribution between both groups. One notable difference is that, for customers, we see more volume centered around 4 while the non-customers’ number of patents approved seems to be equally likely to be between 0 and 4. We cannot be certain looking at the plots alone, so we contimue by looking at the average number of patents approved but customer status.</p>
+<p>We want to use this ddata to provide insights as to whether or not firms using Blueprinty’s software are more successful in getting their patent applications approved. We first visualize our data to see if there is an obvious difference in the number of patens approved between customers and non-customers. The plot blow shows a roughly similar distribution between both groups. One notable difference is that, for customers, we see more volume centered around 4 while the non-customers’ number of patents approved seems to be equally likely to be between 0 and 4. We cannot be certain looking at the plots alone, so we contimue by looking at the average number of patents approved but customer status.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>customers <span class="ot">&lt;-</span> blueprinty[blueprinty<span class="sc">$</span>iscustomer <span class="sc">==</span> <span class="dv">1</span>, ]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>noncustomers <span class="ot">&lt;-</span> blueprinty[blueprinty<span class="sc">$</span>iscustomer <span class="sc">==</span> <span class="dv">0</span>, ]</span>
@@ -303,7 +305,6 @@ Multiple R-squared:  0.004522,  Adjusted R-squared:  0.003857
 F-statistic: 6.804 on 1 and 1498 DF,  p-value: 0.009184</code></pre>
 </div>
 </div>
-<p><em>todo: Compare regions and ages by customer status. What do you observe?</em></p>
 <p>Despite our findings, we must note that Blueprinty customers are not selected at random. It may be important to account for systematic differences in the age and regional location of customers vs non-customers. To check whether or not there is a systematic difference in the composition of the group, we will look at the group level compositions for both customers and non-customers. In the plots below, we compare the distributions for age and region.</p>
 <section id="comparing-regions" class="level4">
 <h4 class="anchored" data-anchor-id="comparing-regions">Comparing Regions</h4>
@@ -393,16 +394,14 @@ F-statistic: 6.804 on 1 and 1498 DF,  p-value: 0.009184</code></pre>
 <section id="estimation-of-simple-poisson-model" class="level3">
 <h3 class="anchored" data-anchor-id="estimation-of-simple-poisson-model">Estimation of Simple Poisson Model</h3>
 <p>Since our outcome variable of interest can only be small integer values per a set unit of time, we can use a Poisson density to model the number of patents awarded to each engineering firm over the last 5 years. We start by estimating a simple Poisson model via Maximum Likelihood.</p>
-<p><em>todo: Write down mathematically the likelihood for</em></p>
 <p>The mathematical likelihood for a Poisson distribution is as follows: <span class="math inline">\(Y \sim \text{Poisson}(\lambda)\)</span>. Note that <span class="math inline">\(f(Y|\lambda) = e^{-\lambda}\lambda^Y/Y!\)</span>.</p>
-<p><em>todo: Code the likelihood (or log-likelihood) function for the Poisson model. This is a function of lambda and Y. For example:</em> Next, we plot the Poisson likelihood (as well as the log-likelihood) as a function of using the number of patents observed as the input for Y.</p>
+<p>Next, we plot the Poisson likelihood (as well as the log-likelihood) as a function of using the number of patents observed as the input for Y.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>poisson_log_likelihood <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda, Y){</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>   log_likelihood <span class="ot">&lt;-</span> <span class="sc">-</span>lambda <span class="sc">+</span> <span class="fu">sum</span>(Y <span class="sc">*</span> <span class="fu">log</span>(lambda)) <span class="sc">-</span> <span class="fu">sum</span>(<span class="fu">log</span>(<span class="fu">factorial</span>(Y)))</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">return</span>(<span class="fu">sum</span>(log_likelihood))</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><em>todo: Use your function to plot lambda on the horizontal axis and the likelihood (or log-likelihood) on the vertical axis for a range of lambdas (use the observed number of patents as the input for Y).</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the patents column from the blueprinty dataset</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> blueprinty<span class="sc">$</span>patents</span>
@@ -423,7 +422,6 @@ F-statistic: 6.804 on 1 and 1498 DF,  p-value: 0.009184</code></pre>
 </div>
 </div>
 </div>
-<p><em>todo: If you’re feeling mathematical, take the first derivative of your likelihood or log-likelihood, set it equal to zero and solve for lambda. You will find lambda_mle is Ybar, which “feels right” because the mean of a Poisson distribution is lambda.</em></p>
 <p>We can use calculus to optimize our likelihood function by taking the first derivative of our log-likelihood function and setting it equal to zero to solve for lambda.</p>
 <p>The log-likelihood function for the Poisson distribution is:</p>
 <p><span class="math inline">\(\log L(\lambda) = -\lambda + Y \log(\lambda) - \log(Y!)\)</span></p>
@@ -434,7 +432,6 @@ F-statistic: 6.804 on 1 and 1498 DF,  p-value: 0.009184</code></pre>
 <p><span class="math inline">\(\frac{Y}{\lambda} = 1\)</span></p>
 <p><span class="math inline">\(\lambda = Y\)</span></p>
 <p>So, the maximum likelihood estimate of ( <span class="math inline">\(\lambda\)</span> ) for the Poisson distribution is ( <span class="math inline">\(\lambda\)</span> = Y ), which is to be expected given that the mean of a Poisson distribution is lambda (<span class="math inline">\(\lambda\)</span>).</p>
-<p><em>todo: Find the MLE by optimizing your likelihood function with optim() in R or sp.optimize() in Python.</em></p>
 <p>We can also find the maximum likelihood estimate (MLE) of ( <span class="math inline">\(\lambda\)</span>) for the Poisson distribution by optimizing the log-likelihood function using R’s <code>optim()</code> function. Here’s how we can do it:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the log-likelihood function for the Poisson distribution</span></span>
@@ -459,7 +456,6 @@ F-statistic: 6.804 on 1 and 1498 DF,  p-value: 0.009184</code></pre>
 <section id="estimation-of-poisson-regression-model" class="level3">
 <h3 class="anchored" data-anchor-id="estimation-of-poisson-regression-model">Estimation of Poisson Regression Model</h3>
 <p>Next, we extend our simple Poisson model to a Poisson Regression Model such that <span class="math inline">\(Y_i = \text{Poisson}(\lambda_i)\)</span> where <span class="math inline">\(\lambda_i = \exp(X_i'\beta)\)</span>. The interpretation is that the success rate of patent awards is not constant across all firms (<span class="math inline">\(\lambda\)</span>) but rather is a function of firm characteristics <span class="math inline">\(X_i\)</span>. Specifically, we will use the covariates age, age squared, region, and whether the firm is a customer of Blueprinty.</p>
-<p><em>todo: Update your likelihood or log-likelihood function with an additional argument to take in a covariate matrix X. Also change the parameter of the model from lambda to the beta vector. In this model, lambda must be a positive number, so we choose the inverse link function g() to be exp() so that</em> <span class="math inline">\(\lambda_i = e^{X_i'\beta}\)</span>. <em>For example:</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert region to factor</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>blueprinty<span class="sc">$</span>region <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(blueprinty<span class="sc">$</span>region)</span>
@@ -475,7 +471,6 @@ F-statistic: 6.804 on 1 and 1498 DF,  p-value: 0.009184</code></pre>
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(log_likelihood)</span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><em>todo: Use your function along with R’s optim() or Python’s sp.optimize() to find the MLE vector and the Hessian of the Poisson model with covariates. Specifically, the first column of X should be all 1’s to enable a constant term in the model, and the subsequent columns should be age, age squared, binary variables for all but one of the regions, and the binary customer variable. Use the Hessian to find standard errors of the beta parameter estimates and present a table of coefficients and standard errors.</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Use optim() to find the MLE vector and the Hessian</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#out &lt;- optim(par = rep(0, ncol(X)), fn = poisson_reg_ll, X = X, y = y, hessian = FALSE, control = list(fnscale = -1), method = "Nelder-Mead")</span></span>
@@ -490,8 +485,42 @@ F-statistic: 6.804 on 1 and 1498 DF,  p-value: 0.009184</code></pre>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Display coefficients and standard errors</span></span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><em>todo: Check your results using R’s glm() function or Python sm.GLM() function.</em></p>
-<p><em>todo: Interpret the results. What do you conclude about the effect of Blueprinty’s software on patent success?</em></p>
+<p>We can test the validity of our results using a generalized linear model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a Poisson regression model using glm</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>glm_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(patents <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> region <span class="sc">+</span> iscustomer, <span class="at">data =</span> blueprinty, <span class="at">family =</span> <span class="st">"poisson"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Display summary of the glm model</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(glm_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = patents ~ age + I(age^2) + region + iscustomer, 
+    family = "poisson", data = blueprinty)
+
+Coefficients:
+                  Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)     -0.4512823  0.1836301  -2.458  0.01399 *  
+age              0.1445364  0.0138793  10.414  &lt; 2e-16 ***
+I(age^2)        -0.0028681  0.0002577 -11.131  &lt; 2e-16 ***
+regionNortheast  0.0985960  0.0420070   2.347  0.01892 *  
+regionNorthwest -0.0200942  0.0537833  -0.374  0.70869    
+regionSouth      0.0571720  0.0526757   1.085  0.27776    
+regionSouthwest  0.0513470  0.0472124   1.088  0.27678    
+iscustomer       0.1181144  0.0389204   3.035  0.00241 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 2362.5  on 1499  degrees of freedom
+Residual deviance: 2178.8  on 1492  degrees of freedom
+AIC: 6567.7
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+</div>
+<p>Interpreting the results of our regression we can cnofirm that being a customer has a positive and statistically significant impact on the likelihood of a patent application being approved. This finding supports the initial claim that firms using Blueprinty’s software are more successful in getting their patent applications approved. Our regression results are also telling us that age and region have a statistically significant effect on patent outcomes. This finding is consistent with the differences we had observed in patent outcomes and age/region distributions between customers and non customers. Given our results, it would be wise for a firm to consider becoming a customer to realize the effects of Blueprinty’s software on patent success.</p>
 </section>
 </section>
 <section id="airbnb-case-study" class="level2">
@@ -527,9 +556,101 @@ Variable Definitions
 </div>
 </div>
 </div>
-<p><em>todo: Assume the number of reviews is a good proxy for the number of bookings. Perform some exploratory data analysis to get a feel for the data, handle or drop observations with missing values on relevant variables, build one or more models (e.g., a poisson regression model for the number of bookings as proxied by the number of reviews), and interpret model coefficients to describe variation in the number of reviews as a function of the variables provided.</em></p>
+</section>
+<section id="data-1" class="level3">
+<h3 class="anchored" data-anchor-id="data-1">Data</h3>
+<p>To begin our analysis, we first need to read in the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the data</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>airbnb <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"~/My_Quarto_Website/projects/project2/airbnb.csv"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to replace NA with mode</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>na_to_mode <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.factor</span>(x) <span class="sc">|</span> <span class="fu">is.character</span>(x)) {</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    mode_val <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">which.max</span>(<span class="fu">table</span>(x)))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span> mode_val</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    mode_val <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">names</span>(<span class="fu">which.max</span>(<span class="fu">table</span>(x))))</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    x[<span class="fu">is.na</span>(x)] <span class="ot">&lt;-</span> mode_val</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the function to each column</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>airbnb_clean <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">lapply</span>(airbnb, na_to_mode))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualizing-the-response-variable" class="level4">
+<h4 class="anchored" data-anchor-id="visualizing-the-response-variable">Visualizing the Response Variable</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(airbnb_clean, <span class="fu">aes</span>(<span class="at">x =</span> airbnb_clean<span class="sc">$</span>number_of_reviews)) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Use of `airbnb_clean$number_of_reviews` is discouraged.
+ℹ Use `number_of_reviews` instead.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_questions_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(airbnb_clean<span class="sc">$</span>number_of_reviews)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 421</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="modeling-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-the-data">Modeling the data</h3>
+<p>The Poisson regression model explores the factors influencing the number of reviews for Airbnb listings. The intercept (5.537) represents the expected number of reviews when all other variables are zero, which is not practically meaningful in this context. For each additional day of availability, the expected number of reviews increases by a factor of 1.00005021. Private rooms are associated with a 14.57% decrease, and shared rooms with a 41.71% decrease in the expected number of reviews compared to entire home/apartment listings. Each additional bathroom is linked to a 11.61% decrease, while each additional bedroom corresponds to a 7.02% increase in the expected number of reviews. Higher prices are associated with a slight decrease in reviews, with each unit increase leading to a 0.024% decrease. Higher review scores for cleanliness, location, and value are associated with increases in the expected number of reviews. Lastly, listings that are instant bookable have an expected 34.68% increase in reviews compared to non-instant bookable listings.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(number_of_reviews <span class="sc">~</span> days <span class="sc">+</span> room_type <span class="sc">+</span> bathrooms <span class="sc">+</span> bedrooms <span class="sc">+</span> price <span class="sc">+</span> review_scores_cleanliness <span class="sc">+</span>review_scores_location <span class="sc">+</span> review_scores_value <span class="sc">+</span> instant_bookable, <span class="at">data =</span> airbnb_clean , <span class="at">family =</span> poisson)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = number_of_reviews ~ days + room_type + bathrooms + 
+    bedrooms + price + review_scores_cleanliness + review_scores_location + 
+    review_scores_value + instant_bookable, family = poisson, 
+    data = airbnb_clean)
+
+Coefficients:
+                            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                5.537e+00  1.289e-02  429.50   &lt;2e-16 ***
+days                       5.021e-05  3.547e-07  141.56   &lt;2e-16 ***
+room_typePrivate room     -1.457e-01  2.785e-03  -52.33   &lt;2e-16 ***
+room_typeShared room      -4.171e-01  8.595e-03  -48.53   &lt;2e-16 ***
+bathrooms                 -1.161e-01  3.800e-03  -30.55   &lt;2e-16 ***
+bedrooms                   7.018e-02  1.990e-03   35.26   &lt;2e-16 ***
+price                     -2.441e-04  1.082e-05  -22.55   &lt;2e-16 ***
+review_scores_cleanliness  3.794e-02  1.454e-03   26.09   &lt;2e-16 ***
+review_scores_location    -1.803e-01  1.541e-03 -116.99   &lt;2e-16 ***
+review_scores_value       -1.480e-01  1.777e-03  -83.31   &lt;2e-16 ***
+instant_bookablet          3.468e-01  2.875e-03  120.64   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 1340709  on 40627  degrees of freedom
+Residual deviance: 1262681  on 40617  degrees of freedom
+AIC: 1386748
+
+Number of Fisher Scoring iterations: 9</code></pre>
+</div>
+</div>
+<section id="refining-the-model" class="level4">
+<h4 class="anchored" data-anchor-id="refining-the-model">Refining the Model</h4>
 
 
+</section>
 </section>
 </section>
 
