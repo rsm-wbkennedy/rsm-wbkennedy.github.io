@@ -1,6 +1,6 @@
 ---
 title: "Poisson Regression Examples"
-author: "Your Name"
+author: "Warren Kennedy"
 date: today
 callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 editor_options: 
