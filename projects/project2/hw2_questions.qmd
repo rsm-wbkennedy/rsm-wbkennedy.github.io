@@ -24,7 +24,7 @@ To begin our analysis, we first need to read in the data.
 blueprinty <- read.csv("~/My_Quarto_Website/projects/project2/blueprinty.csv")
 ```
 
-We want to use this ddata to provide insights as to whether or not firms using Blueprinty's software are more successful in getting their patent applications approved. We first visualize our data to see if there is an obvious difference in the number of patens approved between customers and non-customers. The plot blow shows a roughly similar distribution between both groups. One notable difference is that, for customers, we see more volume centered around 4 while the non-customers' number of patents approved seems to be equally likely to be between 0 and 4. We cannot be certain looking at the plots alone, so we contimue by looking at the average number of patents approved but customer status.
+We want to use this data to provide insights as to whether or not firms using Blueprinty's software are more successful in getting their patent applications approved. We first visualize our data to see if there is an obvious difference in the number of patents approved between customers and non-customers. The plot below shows a roughly similar distribution between both groups. One notable difference is that, for customers, we see more volume centered around 4 while the non-customers' number of patents approved seems to be equally likely to be between 0 and 4. We cannot be certain looking at the plots alone, so we continue by looking at the average number of patents approved given  customer status.
 
 ```{r}
 customers <- blueprinty[blueprinty$iscustomer == 1, ]
@@ -73,7 +73,7 @@ patents_lm <- lm(patents~iscustomer, data=blueprinty)
 summary(patents_lm)
 ```
 
-Despite our findings, we must note that Blueprinty customers are not selected at random. It may be important to account for systematic differences in the age and regional location of customers vs non-customers. To check whether or not there is a systematic difference in the composition of the group, we will look at the group level compositions for both customers and non-customers. In the plots below, we compare the distributions for age and region.
+Despite our findings, it is important to note that the Blueprinty customers may not be selected at random. There may be systematic differences in the age and regional location of customers vs non-customers. To check whether or not there is a systematic difference in the composition of the group, we will look at the group level compositions for both customers and non-customers. In the plots below, we compare the distributions for age and region.
 
 #### Comparing Regions
 
@@ -139,7 +139,7 @@ legend("topright",
 
 ### Estimation of Simple Poisson Model
 
-Since our outcome variable of interest can only be small integer values per a set unit of time, we can use a Poisson density to model the number of patents awarded to each engineering firm over the last 5 years. We start by estimating a simple Poisson model via Maximum Likelihood.
+Since our outcome variable of interest can only be small integer values per a set unit of time, we can use a Poisson density plot to model the number of patents awarded to each engineering firm over the last 5 years. We start by estimating a simple Poisson model via Maximum Likelihood.
 
 The mathematical likelihood for a Poisson distribution is as follows: $Y \sim \text{Poisson}(\lambda)$. Note that $f(Y|\lambda) = e^{-\lambda}\lambda^Y/Y!$.
 
@@ -268,7 +268,7 @@ AirBnB is a popular platform for booking short-term rentals. In March 2017, stud
 
 ### Data
 
-To begin our analysis, we first need to read in the data.
+To begin our analysis, we first need to read in the data. At first glance, our data has a large amount of 'NA' values. If the missing values were few and randomly distributed, we could choose to simply remove the rows with NA values. However in this case, we would lose a significant amount of data if we were to resolve the missing data in this way. Instead we have chosen to replace the missing data with the most common values from their respective columns.
 
 ```{r}
 # read in the data
@@ -293,12 +293,78 @@ airbnb_clean <- as.data.frame(lapply(airbnb, na_to_mode))
 
 #### Visualizing the Response Variable
 
+For this data we use `number_of_reviews` as a proxy for a room being booked. To begin our analysis, we will visualize our data to see if there are any notable trends. The first plot below shows the distribution for the number of reviews variables. As expected, our data is right-skewed, indicating that most rooms have a higher probability of having few reviews as opposed to many.  
 ```{r}
 library(ggplot2)
 ggplot(airbnb_clean, aes(x = airbnb_clean$number_of_reviews)) +
   geom_histogram()
 
 max(airbnb_clean$number_of_reviews)
+```
+
+The second trend that we note is that the number_of_reviews is positively correlated with the number of days a unit has been listed. This trend is to be expected given that the higher the number of days that a unit is listed, the more time the unit has to be given a review. 
+```{r}
+# Find the 10th percentile of the "days" variable
+percentile_10 <- quantile(airbnb_clean$days, 0.1)
+
+# Subset the data to include only the lowest 90 percent of the "days" variable
+subset_df <- airbnb_clean[airbnb_clean$days <= percentile_10, ]
+
+ggplot(subset_df, aes(x = days, y = number_of_reviews)) +
+  geom_point() +  # Add points
+  geom_line()   
+```
+
+Next we take a look at the difference between units that offer an instant booking option against those that don't. The mean values for the two groups are different, so we will want to compare the overall composition of the groups to see if they are any adjustments that need to be made for our analysis.
+```{r}
+#split data into customer and non-customer
+instant_book <- airbnb_clean[airbnb_clean$instant_bookable == 't', ]
+no_instant_book <- airbnb_clean[airbnb_clean$instant_bookable == 'f', ]
+
+review_mean_ib <- mean(instant_book$number_of_reviews) 
+review_mean_nonib <- mean(no_instant_book$number_of_reviews)
+
+print(review_mean_ib)
+print(review_mean_nonib)
+```
+
+In the plot below, we see that the number of reviews can vary significantly depending on the room type. Entire homes and apartments tend to receive the most reviews while shared rooms hardly receive any. This difference in outcomes can be used to compare the distributions between Instant booking and non-instant booking units.
+```{r}
+# Create a bar plot
+ggplot(airbnb_clean, aes(x = room_type, y = number_of_reviews)) +
+  geom_bar(stat = "identity", fill = "dodgerblue") +
+  labs(x = "Room Type", y = "Number of Reviews", title = "Number of Reviews by Room Type")
+```
+
+
+When we compare the room types between both groups, we see that they are relatively the same. We will continue our analysis assuming that the two groups have a similar composition. 
+```{r}
+# Get frequency counts for each group in column_name1
+group_counts1 <- table(no_instant_book$room_type)
+
+# Plot a bar plot of the frequency counts for column_name1
+barplot(group_counts1,
+        main = "Room_Type Comparison",
+        xlab = "Room Type",
+        ylab = "Frequency",
+        col = "dodgerblue",
+        border = "black"
+)
+
+# Get frequency counts for each group in column_name2
+group_counts2 <- table(instant_book$room_type)
+
+# Add the bar plot of the frequency counts for column_name2 to the existing plot
+barplot(group_counts2,
+        col = "red",
+        add = TRUE
+)
+
+# Add a legend
+legend("topright",
+       legend = c("No Instant Book", "Instant Book"),
+       fill = c("dodgerblue", "red")
+)
 ```
 
 ### Modeling the data
@@ -311,4 +377,40 @@ model <- glm(number_of_reviews ~ days + room_type + bathrooms + bedrooms + price
 summary(model)
 ```
 
-#### Refining the Model
+### Estimation of Poisson Regression Model
+
+Next, we confirm our results using a Poisson Regression Model such that $Y_i = \text{Poisson}(\lambda_i)$ where $\lambda_i = \exp(X_i'\beta)$. 
+
+```{r}
+# Convert region to factor
+airbnb_clean$room_type <- as.factor(airbnb_clean$room_type)
+airbnb_clean$room_type <- relevel(airbnb_clean$room_type, ref = "Shared room")
+
+# Create covariate matrix X
+X2 <- model.matrix(~ ., data=airbnb_clean)
+y2 <- airbnb_clean$number_of_reviews
+
+# Update likelihood function for Poisson regression
+poisson_reg_ll <- function(beta, X2, y2){
+   lambda <- exp(X2 %*% beta)
+   log_likelihood <- sum(dpois(y2, lambda, log = TRUE))
+  return(log_likelihood)
+}
+
+```
+
+```{r}
+## Use optim() to find the MLE vector and the Hessian
+out <- optim(par = rep(0, ncol(X2)), fn = poisson_reg_ll, X = X2, y = y2, hessian = TRUE, control = list(fnscale = -1), method = 'BFGS')
+
+
+## Calculate standard errors of beta parameter estimates
+Hinv <- -solve(out$hessian)
+results <- cbind(coefs = out$par, sterr = sqrt(diag(Hinv)))
+rownames(results) <- colnames(X2)
+results <- round(results, 4)
+
+## Display coefficients and standard errors
+results
+```
+
