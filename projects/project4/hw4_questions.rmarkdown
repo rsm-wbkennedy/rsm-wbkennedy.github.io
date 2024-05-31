@@ -1,0 +1,255 @@
+---
+title: "Key Drivers Analysis"
+author: "Warren Kennedy"
+date: today
+---
+
+
+
+This post implements a few measure of variable importance, interpreted as a key drivers analysis, for certain aspects of a payment card on customer satisfaction with that payment card.
+
+```{r}
+
+```
+
+
+
+_todo: replicate the table on slide 19 of the session 4 slides. This involves calculating pearson correlations, standardized regression coefficients, "usefulness", Shapley values for a linear regression, Johnson's relative weights, and the mean decrease in the gini coefficient from a random forest. You may use packages built into R or Python._
+
+```{r}
+# Load necessary library
+library(dplyr)
+library(lm.beta)
+library(relaimpo)
+library(iml)
+library(randomForest)
+```
+
+```{r}
+# Read data into data fram
+data <- read.csv("~/My_Quarto_Website/projects/project4/data_for_drivers_analysis.csv")
+```
+
+
+## Pearson Correlation
+Pearson correlation is a measure of the linear relationship between two variables. It quantifies the degree to which changes in one variable predict changes in another, ranging from -1 (perfect negative correlation) to +1 (perfect positive correlation). While Pearson correlation is straightforward and easy to interpret, it is sensitive to multicollinearity. When predictor variables are highly correlated, it becomes difficult to disentangle their individual effects on the outcome variable. This can lead to misleading conclusions about the importance of each predictor, as the correlation might reflect the combined influence of multiple correlated predictors rather than a single predictor's effect.
+
+```{r}
+#pearson correlations
+
+# Assuming your data is loaded into a dataframe called 'data'
+# Calculate the Pearson correlation matrix
+correlation_matrix <- cor(data, method = "pearson")
+
+# Extract the Pearson correlation values for 'satisfaction' with each variable
+satisfaction_correlations <- correlation_matrix['satisfaction', ]
+satisfaction_correlations <- satisfaction_correlations[!names(satisfaction_correlations) %in% c('satisfaction', 'brand', 'id')]
+
+# Convert the correlation values to percentages and round them to tenths
+satisfaction_correlations <- round(satisfaction_correlations * 100, 1)
+
+# Create a dataframe with the Pearson correlation values
+satisfaction_correlations_df <- data.frame(
+  Perception = names(satisfaction_correlations),
+  `Pearson correlation` = satisfaction_correlations,
+  row.names = NULL
+)
+
+# Print the dataframe
+print(satisfaction_correlations_df)
+
+```
+
+
+
+## Standardized Regression Coefficient
+The standardized regression coefficient, also known as the beta coefficient, indicates how many standard deviations the dependent variable will change per standard deviation increase in the predictor variable. This standardization allows for direct comparison of the relative importance of predictors in a regression model. However, in the presence of multicollinearity, standardized regression coefficients can be unstable and inflated. Multicollinearity causes large standard errors, making it difficult to ascertain the true effect of each predictor. Consequently, even though standardized coefficients provide a sense of relative importance, their reliability diminishes when predictors are highly correlated.
+
+```{r}
+# standardized regression coefficients
+
+# Run a linear regression with the original variables
+model <- lm(satisfaction ~ ., data = data)
+
+# Extract the unstandardized coefficients
+unstandardized_coefficients <- coef(model)
+
+# Remove intercept
+unstandardized_coefficients <- unstandardized_coefficients[-1]
+
+# Compute the variance of each predictor and the response variable
+variances <- sapply(data, var)
+
+# Compute the standardized coefficients using the specified method
+standardized_coefficients <- unstandardized_coefficients * 
+                             variances[names(unstandardized_coefficients)] / 
+                             variances["satisfaction"]
+
+# Create a dataframe with the standardized regression coefficients
+standardized_coefficients_df <- data.frame(
+  Perception = names(standardized_coefficients),
+  `Standardized regression coefficient` = round(standardized_coefficients * 100, 1)
+)
+
+# Assuming satisfaction_correlations_df is your existing dataframe with Pearson correlations
+# Merge the dataframes by the Perception column
+merged_df <- merge(satisfaction_correlations_df, standardized_coefficients_df, by = "Perception", all.x = TRUE)
+
+# Print the dataframe
+print(merged_df)
+
+```
+
+
+## Usefulness
+The "usefulness" metric is designed to quantify the additional explanatory power that each predictor variable provides when included in the regression model. This is achieved by calculating the increase in the model's R-squared value when each predictor is added last, after accounting for all other predictors. This approach is implemented in the relaimpo package under the name "last" and can also be computed directly using the drop1 function in R. The usefulness metric addresses multicollinearity by evaluating each predictor's contribution in the context of the other predictors already in the model. When predictors are correlated, their individual contributions to the overall model fit might be smaller, and the usefulness metric typically sums to less than the total R-squared value of the model. This method helps to distribute the shared variance among correlated predictors, providing a clearer picture of each predictor's unique importance despite the presence of multicollinearity.
+
+```{r}
+# "usefulness"
+
+# Calculate the relative importance using the "last" metric
+relimp_results <- calc.relimp(model, type = "last")
+
+# Extract the relative importance values
+usefulness_values <- relimp_results$lmg
+
+# Create a dataframe with the relative importance values
+usefulness_df <- data.frame(
+  Perception = names(usefulness_values),
+  Usefulness = round(usefulness_values * 100, 1)
+)
+
+# Merge the dataframes by the Perception column
+merged_df <- merge(satisfaction_correlations_df, standardized_coefficients_df, by = "Perception", all.x = TRUE)
+
+# Calculate the relative importance using the "last" metric
+relimp_results <- calc.relimp(model, type = "lmg", rela = FALSE)
+
+# Extract the relative importance values
+usefulness_values <- relimp_results$lmg
+
+# Create a dataframe with the relative importance values
+usefulness_df <- data.frame(
+  Perception = names(usefulness_values),
+  Usefulness = round(usefulness_values * 100, 1),
+  row.names = NULL
+)
+
+# Merge the usefulness values into the existing dataframe
+final_df <- merge(merged_df, usefulness_df, by = "Perception", all.x = TRUE)
+
+# Print the final dataframe
+print(final_df)
+
+
+```
+
+
+## Shapley Value
+Shapley values, derived from cooperative game theory, offer a fair distribution of the total contribution to the predictive power of a model among all predictors. Each predictor's importance is assessed by considering all possible subsets of predictors, ensuring that each predictor's contribution is fairly allocated. Shapley values are robust to multicollinearity because they consider all possible combinations of predictors, effectively averaging out the influence of correlated predictors. This makes Shapley values a powerful method for understanding variable importance in complex models with multicollinearity.
+
+```{r}
+# shapley values for linear regression
+# Calculate Shapley values using the iml package
+# Create a Predictor object
+predictor <- Predictor$new(model, data = data, y = data$satisfaction)
+
+# Calculate Shapley values for the first instance
+shapley <- Shapley$new(predictor, x.interest = data[1, ])
+
+# Aggregate Shapley values for each feature
+shapley_values <- aggregate(shapley$results$phi, by = list(shapley$results$feature), FUN = mean)
+colnames(shapley_values) <- c("Perception", "Shapley value")
+
+# Convert Shapley values to percentages and round them to tenths
+shapley_values$`Shapley value` <- round(shapley_values$`Shapley value` * 100, 1)
+
+# Merge the Shapley values into the existing dataframe
+final_df <- merge(merged_df, shapley_values, by = "Perception", all.x = TRUE)
+
+# Print the final dataframe
+print(final_df)
+```
+
+
+## Johnson's Relative Weights
+Johnson's relative weights measure the proportion of variance in the dependent variable explained by each predictor, considering the unique contribution of each predictor while accounting for multicollinearity. This method decomposes the total R-squared into parts attributable to each predictor, helping to identify which predictors are most important in the presence of correlated predictors. By using principal component analysis, Johnson's relative weights effectively distribute the shared variance among correlated predictors, offering a more accurate representation of each predictor's importance. This makes it a valuable tool for addressing multicollinearity and understanding variable importance in regression models.
+
+```{r}
+# johnsons relative weights
+# Calculate Johnson's relative weights using the reilaimpo package
+relimp_results <- calc.relimp(model, type = "lmg", rela = FALSE)
+
+# Extract Johnson's relative weights
+johnsons_relative_weights <- relimp_results$lmg
+
+# Create a dataframe with Johnson's relative weights
+johnsons_relative_weights_df <- data.frame(
+  Perception = names(johnsons_relative_weights),
+  `Johnson's relative weight` = round(johnsons_relative_weights * 100, 1),
+  row.names = NULL
+)
+
+# Assuming final_df is your existing dataframe with Pearson correlations, standardized coefficients, relative importance, and Shapley values
+# Merge Johnson's relative weights into the existing dataframe
+final_df <- merge(final_df, johnsons_relative_weights_df, by = "Perception", all.x = TRUE)
+
+# Print the final dataframe
+print(final_df)
+```
+
+```{r}
+# mean decrease in random forest gini coefficient
+
+# Fit a Random Forest model
+#set.seed(123) # For reproducibility
+#rf_model <- randomForest(satisfaction ~ ., data = data, importance = TRUE)
+
+# Inspect the importance output to identify the correct column names
+#importance_output <- importance(rf_model)
+#print(importance_output)
+
+# Extract Mean Decrease in Gini coefficients
+#importance_df <- as.data.frame(importance_output)
+#importance_df$Perception <- rownames(importance_df)
+#rownames(importance_df) <- NULL
+
+# Print importance_df to verify the column names
+#print(importance_df)
+
+# Extract only the Mean Decrease in Gini values
+# The correct column name should be identified from the inspection
+#mean_decrease_gini_df <- importance_df[, c("Perception", "MeanDecreaseGini")]
+
+# Round the Mean Decrease in Gini values
+#mean_decrease_gini_df$MeanDecreaseGini <- round(mean_decrease_gini_df$MeanDecreaseGini, 1)
+
+# Assuming final_df is your existing dataframe with Pearson correlations, standardized coefficients, relative importance, and Shapley values
+# Merge Mean Decrease in Gini coefficients into the existing dataframe
+#final_df <- merge(final_df, mean_decrease_gini_df, by = "Perception", all.x = TRUE)
+
+# Print the final dataframe
+#print(final_df)
+```
+
+```{r}
+# Change variable names
+final_df$Perception[final_df$Perception == 'trust'] <- "Is offered by a brand I trust"
+final_df$Perception[final_df$Perception == 'build'] <- "Helps build credit quickly"
+final_df$Perception[final_df$Perception == 'differs'] <- "Is different from other cards"
+final_df$Perception[final_df$Perception == 'easy'] <- "Is easy to use"
+final_df$Perception[final_df$Perception == 'appealing'] <- "Has appealing benefits or rewards"
+final_df$Perception[final_df$Perception == 'rewarding'] <- "Rewards me for responsible usage"
+final_df$Perception[final_df$Perception == 'popular'] <- "Is used by a lot of people"
+final_df$Perception[final_df$Perception == 'service'] <- "Provides outstanding customer service"
+final_df$Perception[final_df$Perception == 'impact'] <- "Makes a difference in my life"
+
+print(final_df)
+```
+
+
+_If you want a challenge, either (1) implement one or more of the measures yourself. "Usefulness" is rather easy to program up. Shapley values for linear regression are a bit more work. Or (2) add additional measures to the table such as the importance scores from XGBoost._
+
+
+
+
