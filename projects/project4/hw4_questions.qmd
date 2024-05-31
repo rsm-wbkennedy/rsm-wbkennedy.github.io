@@ -6,13 +6,9 @@ date: today
 
 
 This post implements a few measure of variable importance, interpreted as a key drivers analysis, for certain aspects of a payment card on customer satisfaction with that payment card.
-```{r}
-
-```
-
 
 _todo: replicate the table on slide 19 of the session 4 slides. This involves calculating pearson correlations, standardized regression coefficients, "usefulness", Shapley values for a linear regression, Johnson's relative weights, and the mean decrease in the gini coefficient from a random forest. You may use packages built into R or Python._
-```{r}
+```{r, echo=FALSE}
 # Load necessary library
 library(dplyr)
 library(lm.beta)
