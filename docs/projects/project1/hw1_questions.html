@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Warren Kennedy">
-<meta name="dcterms.date" content="2024-04-16">
+<meta name="dcterms.date" content="2024-05-18">
 
-<title>Warren’s Website - A Replication of Karlan and List (2007)</title>
+<title>Warren’s Website - Forecasting Demand: An Analysis of Different Methods</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -152,21 +152,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
   <ul class="collapse">
-  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
-  <li><a href="#balance-test" id="toc-balance-test" class="nav-link" data-scroll-target="#balance-test">Balance Test</a></li>
-  </ul></li>
-  <li><a href="#experimental-results" id="toc-experimental-results" class="nav-link" data-scroll-target="#experimental-results">Experimental Results</a>
-  <ul class="collapse">
-  <li><a href="#charitable-contribution-made" id="toc-charitable-contribution-made" class="nav-link" data-scroll-target="#charitable-contribution-made">Charitable Contribution Made</a></li>
-  <li><a href="#differences-between-match-rates" id="toc-differences-between-match-rates" class="nav-link" data-scroll-target="#differences-between-match-rates">Differences between Match Rates</a></li>
-  <li><a href="#size-of-charitable-contribution" id="toc-size-of-charitable-contribution" class="nav-link" data-scroll-target="#size-of-charitable-contribution">Size of Charitable Contribution</a></li>
-  </ul></li>
-  <li><a href="#simulation-experiment" id="toc-simulation-experiment" class="nav-link" data-scroll-target="#simulation-experiment">Simulation Experiment</a>
-  <ul class="collapse">
-  <li><a href="#law-of-large-numbers" id="toc-law-of-large-numbers" class="nav-link" data-scroll-target="#law-of-large-numbers">Law of Large Numbers</a></li>
-  <li><a href="#central-limit-theorem" id="toc-central-limit-theorem" class="nav-link" data-scroll-target="#central-limit-theorem">Central Limit Theorem</a></li>
+  <li><a href="#including-plots" id="toc-including-plots" class="nav-link" data-scroll-target="#including-plots">Including Plots</a></li>
+  <li><a href="#question-1" id="toc-question-1" class="nav-link" data-scroll-target="#question-1">Question 1:</a></li>
+  <li><a href="#question-2" id="toc-question-2" class="nav-link" data-scroll-target="#question-2">Question 2:</a></li>
+  <li><a href="#question-3" id="toc-question-3" class="nav-link" data-scroll-target="#question-3">Question 3:</a></li>
+  <li><a href="#question-4" id="toc-question-4" class="nav-link" data-scroll-target="#question-4">Question 4:</a></li>
+  <li><a href="#question-5" id="toc-question-5" class="nav-link" data-scroll-target="#question-5">Question 5</a></li>
+  <li><a href="#question-6" id="toc-question-6" class="nav-link" data-scroll-target="#question-6">Question 6:</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -176,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">A Replication of Karlan and List (2007)</h1>
+<h1 class="title">Forecasting Demand: An Analysis of Different Methods</h1>
 </div>
 
 
@@ -193,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 16, 2024</p>
+      <p class="date">May 18, 2024</p>
     </div>
   </div>
   
@@ -207,912 +204,885 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Dean Karlan at Yale and John List at the University of Chicago conducted a field experiment to test the effectiveness of different fundraising letters. They sent out 50,000 fundraising letters to potential donors, randomly assigning each letter to one of three treatments: a standard letter, a matching grant letter, or a challenge grant letter. They published the results of this experiment in the <em>American Economic Review</em> in 2007. The article and supporting data are available from the <a href="https://www.aeaweb.org/articles?id=10.1257/aer.97.5.1774">AEA website</a> and from Innovations for Poverty Action as part of <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/27853&amp;version=4.2">Harvard’s Dataverse</a>.</p>
-<p>The experiment tests a variety of hypotheses, including whether matching donations increases the likelihood of a donation, whether the size of the match matters, and whether the size of the donation is affected by the match. To accomplish this, the authors used a variety of treatments, varying the price ratios for the match, the maximum matching grant amount, and the individual-specific ask amount. The treatments were letters used to solicit donations for a liberal politically motivated group that were sent to all 50 states. To control for spatial heterogeneity, the authors made sure that the treatment and control groups were balanced across states using demographic data, state and county election data, and data on the organization’s activity level within each state. Ultimately, the authors find that matching donations increases the likelihood of a donation, however, they also find that the size of the match does not matter, and that the size of the donation is not affected by the match.</p>
-<p>This project seeks to replicate their results.</p>
+<p>In this report, we present an analysis of various forecasting methods applied to a dataset containing the demand for eggs from Week 1 to Week 500. We compared four forecasting techniques: Oracle (theoretical maximum profit), Simple Exponential Smoothing (Simple ES), Holt’s Linear Trend Method (Holt), and a tuned version of Holt’s method (Holt tuned). Our goal was to determine which method provides the best forecast accuracy and profitability.</p>
 </section>
-<section id="data" class="level2">
-<h2 class="anchored" data-anchor-id="data">Data</h2>
-<section id="description" class="level3">
-<h3 class="anchored" data-anchor-id="description">Description</h3>
-<p><em>todo: Read the data into R/Python and describe the data</em> The data used for this experiment has assigned roughly 2/3 of the individuals to the treatment group while assigning the remaining 1/3 of participants to be receive the standard mailing in the control group. Within the treatment group, we see that the different treatment features are evenly distributed across the treatment group participants</p>
+<section id="methodology" class="level2">
+<h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
+<p>The Oracle method represents the theoretical maximum possible profit, assuming perfect knowledge of future demand. It serves as a benchmark for comparing other forecasting methods. The profit calculation for the Oracle method uses the actual demand directly, thus providing the upper bound for potential profitability.</p>
+<p>Simple Exponential Smoothing (Simple ES) is a basic forecasting method that uses a smoothing parameter (alpha) to weight the most recent observations. We initially set alpha to 0.2 and calculated forecasts for the dataset. This method helps to smooth out short-term fluctuations and highlight longer-term trends or cycles. Additionally, we calculated the profit using a safety stock based on the forecast errors, ensuring that inventory levels could meet unexpected demand spikes.</p>
+<p>Holt’s Linear Trend Method (Holt) extends Simple ES by incorporating a trend component, making it suitable for data with a trend. Initially, we used default values for the smoothing parameters (alpha = 0.2, beta = 0.2). This method accounts for both the level of the series and the trend, thus providing a more nuanced forecast than Simple ES. We calculated the forecasts and profits in a manner similar to Simple ES, but with the added benefit of trend adjustment.</p>
+<p>To improve the forecast accuracy of Holt’s method, we optimized the smoothing parameters (alpha and beta) using a grid search approach to minimize the Mean Squared Error (MSE). By tuning these parameters, we aimed to enhance the method’s responsiveness to changes in the data and reduce forecast errors. Using these optimized parameters, we recalculated the forecasts and profits, labeling this version as Holt tuned.</p>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p>We compared the average weekly profit from Week 301 to Week 500 for each method. The Oracle method, as expected, provided the highest possible profit since it is based on perfect foresight. Simple ES initially performed well, offering better forecasts than Holt’s default settings due to its simplicity and effectiveness in smoothing random variations in the data. However, when we tuned the parameters of Holt’s method, it showed a significant improvement in forecast accuracy and profitability, ultimately outperforming Simple ES.</p>
+<p>Holt’s default settings initially did not provide as high a profit as Simple ES, but after parameter optimization, Holt tuned demonstrated superior performance. This highlights the importance of fine-tuning forecasting models to better capture the underlying patterns in the data.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The analysis demonstrated that while Simple Exponential Smoothing performed well initially, tuning the parameters of Holt’s Linear Trend Method resulted in superior forecasts and higher profitability. This underscores the importance of parameter optimization in forecasting models to achieve the best possible performance.</p>
+<p>By leveraging these findings, organizations can enhance their demand forecasting accuracy and optimize inventory management, leading to improved financial outcomes. Accurate forecasts help in maintaining optimal inventory levels, reducing holding costs, and minimizing stockouts, thereby contributing to overall operational efficiency and customer satisfaction. This study illustrates the practical benefits of applying sophisticated forecasting techniques and the value of continuous improvement through model tuning.</p>
+</section>
+<section id="appendix" class="level1">
+<h1>Appendix</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the data </span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"/home/jovyan/My_Quarto_Website/projects/project1/karlan_list_2007.dta"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize treatment/control split</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>treatment_perc <span class="ot">&lt;-</span> <span class="fu">mean</span>(data<span class="sc">$</span>treatment)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>control_perc <span class="ot">&lt;-</span><span class="fu">mean</span>(data<span class="sc">$</span>control)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the result</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(treatment_perc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6668131</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(control_perc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.3331869</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"~/MGTA456/Homework/Homework2/forecasting_demand_data_2024.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create tables to show the distributions of the treatment features</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ratio_counts <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ratio) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percentage =</span> <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>,<span class="dv">2</span>))</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>size_counts <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(size) <span class="sc">%&gt;%</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percentage =</span> <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>,<span class="dv">2</span>))</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>ask_counts <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ask) <span class="sc">%&gt;%</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percentage =</span> <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>,<span class="dv">2</span>))</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the result</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ratio_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add time trend</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">t=</span><span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptives</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 3
-  ratio           n percentage
-  &lt;dbl+lbl&gt;   &lt;int&gt;      &lt;dbl&gt;
-1 0 [Control] 16687       33.3
-2 1           11133       22.2
-3 2           11134       22.2
-4 3           11129       22.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ask_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 3
-  ask             n percentage
-  &lt;dbl+lbl&gt;   &lt;int&gt;      &lt;dbl&gt;
-1 0 [Control] 16687       33.3
-2 1 [1x]      11134       22.2
-3 2 [1.25x]   11133       22.2
-4 3 [1.50x]   11129       22.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(size_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 3
-  size             n percentage
-  &lt;dbl+lbl&gt;    &lt;int&gt;      &lt;dbl&gt;
-1 0 [Control]  16687       33.3
-2 1 [$25,000]   8350       16.7
-3 2 [$50,000]   8345       16.7
-4 3 [$100,000]  8350       16.7
-5 4 [Unstated]  8351       16.7</code></pre>
+<pre><code>       t             demand    
+ Min.   :  1.0   Min.   :1606  
+ 1st Qu.:125.8   1st Qu.:2477  
+ Median :250.5   Median :3045  
+ Mean   :250.5   Mean   :3012  
+ 3rd Qu.:375.2   3rd Qu.:3528  
+ Max.   :500.0   Max.   :4410  </code></pre>
 </div>
 </div>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Variable Definitions
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<table class="table">
-<colgroup>
-<col style="width: 24%">
-<col style="width: 75%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Variable</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>treatment</code></td>
-<td>Treatment</td>
-</tr>
-<tr class="even">
-<td><code>control</code></td>
-<td>Control</td>
-</tr>
-<tr class="odd">
-<td><code>ratio</code></td>
-<td>Match ratio</td>
-</tr>
-<tr class="even">
-<td><code>ratio2</code></td>
-<td>2:1 match ratio</td>
-</tr>
-<tr class="odd">
-<td><code>ratio3</code></td>
-<td>3:1 match ratio</td>
-</tr>
-<tr class="even">
-<td><code>size</code></td>
-<td>Match threshold</td>
-</tr>
-<tr class="odd">
-<td><code>size25</code></td>
-<td>$25,000 match threshold</td>
-</tr>
-<tr class="even">
-<td><code>size50</code></td>
-<td>$50,000 match threshold</td>
-</tr>
-<tr class="odd">
-<td><code>size100</code></td>
-<td>$100,000 match threshold</td>
-</tr>
-<tr class="even">
-<td><code>sizeno</code></td>
-<td>Unstated match threshold</td>
-</tr>
-<tr class="odd">
-<td><code>ask</code></td>
-<td>Suggested donation amount</td>
-</tr>
-<tr class="even">
-<td><code>askd1</code></td>
-<td>Suggested donation was highest previous contribution</td>
-</tr>
-<tr class="odd">
-<td><code>askd2</code></td>
-<td>Suggested donation was 1.25 x highest previous contribution</td>
-</tr>
-<tr class="even">
-<td><code>askd3</code></td>
-<td>Suggested donation was 1.50 x highest previous contribution</td>
-</tr>
-<tr class="odd">
-<td><code>ask1</code></td>
-<td>Highest previous contribution (for suggestion)</td>
-</tr>
-<tr class="even">
-<td><code>ask2</code></td>
-<td>1.25 x highest previous contribution (for suggestion)</td>
-</tr>
-<tr class="odd">
-<td><code>ask3</code></td>
-<td>1.50 x highest previous contribution (for suggestion)</td>
-</tr>
-<tr class="even">
-<td><code>amount</code></td>
-<td>Dollars given</td>
-</tr>
-<tr class="odd">
-<td><code>gave</code></td>
-<td>Gave anything</td>
-</tr>
-<tr class="even">
-<td><code>amountchange</code></td>
-<td>Change in amount given</td>
-</tr>
-<tr class="odd">
-<td><code>hpa</code></td>
-<td>Highest previous contribution</td>
-</tr>
-<tr class="even">
-<td><code>ltmedmra</code></td>
-<td>Small prior donor: last gift was less than median $35</td>
-</tr>
-<tr class="odd">
-<td><code>freq</code></td>
-<td>Number of prior donations</td>
-</tr>
-<tr class="even">
-<td><code>years</code></td>
-<td>Number of years since initial donation</td>
-</tr>
-<tr class="odd">
-<td><code>year5</code></td>
-<td>At least 5 years since initial donation</td>
-</tr>
-<tr class="even">
-<td><code>mrm2</code></td>
-<td>Number of months since last donation</td>
-</tr>
-<tr class="odd">
-<td><code>dormant</code></td>
-<td>Already donated in 2005</td>
-</tr>
-<tr class="even">
-<td><code>female</code></td>
-<td>Female</td>
-</tr>
-<tr class="odd">
-<td><code>couple</code></td>
-<td>Couple</td>
-</tr>
-<tr class="even">
-<td><code>state50one</code></td>
-<td>State tag: 1 for one observation of each of 50 states; 0 otherwise</td>
-</tr>
-<tr class="odd">
-<td><code>nonlit</code></td>
-<td>Nonlitigation</td>
-</tr>
-<tr class="even">
-<td><code>cases</code></td>
-<td>Court cases from state in 2004-5 in which organization was involved</td>
-</tr>
-<tr class="odd">
-<td><code>statecnt</code></td>
-<td>Percent of sample from state</td>
-</tr>
-<tr class="even">
-<td><code>stateresponse</code></td>
-<td>Proportion of sample from the state who gave</td>
-</tr>
-<tr class="odd">
-<td><code>stateresponset</code></td>
-<td>Proportion of treated sample from the state who gave</td>
-</tr>
-<tr class="even">
-<td><code>stateresponsec</code></td>
-<td>Proportion of control sample from the state who gave</td>
-</tr>
-<tr class="odd">
-<td><code>stateresponsetminc</code></td>
-<td>stateresponset - stateresponsec</td>
-</tr>
-<tr class="even">
-<td><code>perbush</code></td>
-<td>State vote share for Bush</td>
-</tr>
-<tr class="odd">
-<td><code>close25</code></td>
-<td>State vote share for Bush between 47.5% and 52.5%</td>
-</tr>
-<tr class="even">
-<td><code>red0</code></td>
-<td>Red state</td>
-</tr>
-<tr class="odd">
-<td><code>blue0</code></td>
-<td>Blue state</td>
-</tr>
-<tr class="even">
-<td><code>redcty</code></td>
-<td>Red county</td>
-</tr>
-<tr class="odd">
-<td><code>bluecty</code></td>
-<td>Blue county</td>
-</tr>
-<tr class="even">
-<td><code>pwhite</code></td>
-<td>Proportion white within zip code</td>
-</tr>
-<tr class="odd">
-<td><code>pblack</code></td>
-<td>Proportion black within zip code</td>
-</tr>
-<tr class="even">
-<td><code>page18_39</code></td>
-<td>Proportion age 18-39 within zip code</td>
-</tr>
-<tr class="odd">
-<td><code>ave_hh_sz</code></td>
-<td>Average household size within zip code</td>
-</tr>
-<tr class="even">
-<td><code>median_hhincome</code></td>
-<td>Median household income within zip code</td>
-</tr>
-<tr class="odd">
-<td><code>powner</code></td>
-<td>Proportion house owner within zip code</td>
-</tr>
-<tr class="even">
-<td><code>psch_atlstba</code></td>
-<td>Proportion who finished college within zip code</td>
-</tr>
-<tr class="odd">
-<td><code>pop_propurban</code></td>
-<td>Proportion of population urban within zip code</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="balance-test" class="level3">
-<h3 class="anchored" data-anchor-id="balance-test">Balance Test</h3>
-<p>As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.</p>
-<p><em>todo: test a few variables other than the key outcome variables (for example, test months since last donation) to see if the treatment and control groups are statistically significantly different at the 95% confidence level. Do each as a t-test and separately as a linear regression, and confirm you get the exact same results from both methods. When doing a t-test, use the formula in the class slides. When doing the linear regression, regress for example mrm2 on treatment and look at the estimated coefficient on the treatment variable. It might be helpful to compare parts of your analysis to Table 1 in the paper. Be sure to comment on your results (hint: why is Table 1 included in the paper).</em></p>
-<p>We test for a difference in means using both the t-test method and separately the linear regression method. In this case, we use both methods to confirm what we are seeing, however, both methods will ultimately produce the same result. Comparing the means of both the <code>couple</code> and <code>pwhite</code> variables respectively, we see that there is no statistically significant difference between the observations in the treatment and control groups. We tested this hypothesis for each variable at a 95% confidence level. These results give us the confidence to conclude that we do not have the statistical evidence to reject the null hypothesis that there is no difference in the means between the two groups.</p>
-<section id="comparing-means-for-couple" class="level4">
-<h4 class="anchored" data-anchor-id="comparing-means-for-couple">Comparing Means for <code>couple</code></h4>
+<section id="including-plots" class="level3">
+<h3 class="anchored" data-anchor-id="including-plots">Including Plots</h3>
+<p>The data is not normally distributed.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#split data into treatment and control</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>control_df <span class="ot">&lt;-</span> data[data<span class="sc">$</span>treatment <span class="sc">==</span> <span class="dv">0</span>, ]</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>treatment_df <span class="ot">&lt;-</span> data[data<span class="sc">$</span>treatment <span class="sc">==</span> <span class="dv">1</span>, ]</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create data for ttest</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>mean_control <span class="ot">&lt;-</span> <span class="fu">mean</span>(control_df<span class="sc">$</span>couple, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>sd_control <span class="ot">&lt;-</span> <span class="fu">sd</span>(control_df<span class="sc">$</span>couple, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>N_control <span class="ot">&lt;-</span> <span class="fu">length</span>(control_df<span class="sc">$</span>couple)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>mean_treatment <span class="ot">&lt;-</span> <span class="fu">mean</span>(treatment_df<span class="sc">$</span>couple, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>sd_treatment <span class="ot">&lt;-</span> <span class="fu">sd</span>(treatment_df<span class="sc">$</span>couple, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>N_treatment <span class="ot">&lt;-</span> <span class="fu">length</span>(treatment_df<span class="sc">$</span>couple)</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate tstat</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>t_stat <span class="ot">&lt;-</span> (mean_control <span class="sc">-</span> mean_treatment) <span class="sc">/</span> <span class="fu">sqrt</span>((sd_control<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> N_control) <span class="sc">+</span> (sd_treatment<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> N_treatment))</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t_stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.5888429</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>couple_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(couple<span class="sc">~</span>treatment, <span class="at">data=</span>data)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(couple_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = couple ~ treatment, data = data)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.09297 -0.09297 -0.09136 -0.09136  0.90864 
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.092975   0.002261  41.124   &lt;2e-16 ***
-treatment   -0.001617   0.002770  -0.584    0.559    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.2889 on 48933 degrees of freedom
-  (1148 observations deleted due to missingness)
-Multiple R-squared:  6.965e-06, Adjusted R-squared:  -1.347e-05 
-F-statistic: 0.3408 on 1 and 48933 DF,  p-value: 0.5594</code></pre>
-</div>
-</div>
-</section>
-<section id="comparing-means-for-pwhite" class="level4">
-<h4 class="anchored" data-anchor-id="comparing-means-for-pwhite">Comparing Means for <code>pwhite</code></h4>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#split data into treatment and control</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>control_df <span class="ot">&lt;-</span> data[data<span class="sc">$</span>treatment <span class="sc">==</span> <span class="dv">0</span>, ]</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>treatment_df <span class="ot">&lt;-</span> data[data<span class="sc">$</span>treatment <span class="sc">==</span> <span class="dv">1</span>, ]</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create data for ttest</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>mean_control <span class="ot">&lt;-</span> <span class="fu">mean</span>(control_df<span class="sc">$</span>pwhite, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>sd_control <span class="ot">&lt;-</span> <span class="fu">sd</span>(control_df<span class="sc">$</span>pwhite, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>N_control <span class="ot">&lt;-</span> <span class="fu">length</span>(control_df<span class="sc">$</span>pwhite)</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>mean_treatment <span class="ot">&lt;-</span> <span class="fu">mean</span>(treatment_df<span class="sc">$</span>pwhite, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>sd_treatment <span class="ot">&lt;-</span> <span class="fu">sd</span>(treatment_df<span class="sc">$</span>pwhite, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>N_treatment <span class="ot">&lt;-</span> <span class="fu">length</span>(treatment_df<span class="sc">$</span>pwhite)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate tstat</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>t_stat <span class="ot">&lt;-</span> (mean_control <span class="sc">-</span> mean_treatment) <span class="sc">/</span> <span class="fu">sqrt</span>((sd_control<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> N_control) <span class="sc">+</span> (sd_treatment<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> N_treatment))</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t_stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.570052</code></pre>
-</div>
-</div>
-</section>
-<section id="linear-regression-for-pwhite" class="level4">
-<h4 class="anchored" data-anchor-id="linear-regression-for-pwhite">Linear Regression for <code>pwhite</code></h4>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pwhite_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(pwhite<span class="sc">~</span>treatment, <span class="at">data=</span>data)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pwhite_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = pwhite ~ treatment, data = data)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.81079 -0.06378  0.05300  0.11939  0.18070 
-
-Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.8202078  0.0013309  616.28   &lt;2e-16 ***
-treatment   -0.0009128  0.0016292   -0.56    0.575    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.1686 on 48215 degrees of freedom
-  (1866 observations deleted due to missingness)
-Multiple R-squared:  6.51e-06,  Adjusted R-squared:  -1.423e-05 
-F-statistic: 0.3139 on 1 and 48215 DF,  p-value: 0.5753</code></pre>
-</div>
-</div>
-</section>
-</section>
-</section>
-<section id="experimental-results" class="level2">
-<h2 class="anchored" data-anchor-id="experimental-results">Experimental Results</h2>
-<section id="charitable-contribution-made" class="level3">
-<h3 class="anchored" data-anchor-id="charitable-contribution-made">Charitable Contribution Made</h3>
-<p>First, I analyze whether matched donations lead to an increased response rate of making a donation.</p>
-<p><em>todo: make a barplot with two bars. Each bar is the proportion of people who donated. One bar for treatment and one bar for control.</em></p>
-<p>Using a barplot to visually represen the outcome, we first observe the proportion of people who donated using one bar for treatment and one bar for control. Based on the bar plot below, there is a clear difference in the outcome: the treatement group has a higher proportion of people who donated than the control group. The barplot gives us reason to believe that the treatment may have a causal impact on the outcome of giving. Next, we test this hypothesis using statistical methods.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating proportions</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>donation_summary <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(treatment) <span class="sc">%&gt;%</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">proportion_donated =</span> <span class="fu">mean</span>(gave))</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure 'treatment' is a factor</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>donation_summary<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(donation_summary<span class="sc">$</span>treatment)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the proportions</span></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(donation_summary, <span class="fu">aes</span>(<span class="at">x =</span> treatment, <span class="at">y =</span> proportion_donated, <span class="at">fill =</span> treatment)) <span class="sc">+</span></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span>  </span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>)) <span class="sc">+</span> </span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Proportion of People Who Donated by Treatment Status"</span>,</span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Treatment Status"</span>,</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Proportion that Donated"</span>) <span class="sc">+</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw1_questions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="hw1_questions_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p><em>todo: run a t-test between the treatment and control groups on the binary outcome of whether any charitable donation was made. Also run a bivariate linear regression that demonstrates the same finding. (It may help to confirm your calculations match Table 2a Panel A.) Report your statistical results and interpret them in the context of the experiment (e.g., if you found a difference with a small p-value or that was statistically significant at some threshold, what have you learned about human behavior? Use mostly English words, not numbers or stats, to explain your finding.)</em></p>
-<p>We can test our hypothesis by using a t-test to compare the proportions observed between the treatment and control groups. As we have done before, we will confirm the results from our t-test using a bivariate linear regression to demonstrate the same finding.</p>
-<p>The hypothesis we seek to test is whether or not the proportion of people who gave is the same in both the treatment and the control groups. The result from our t-test is that the treatment group is substantially different from the control group. A large t-stat(t-stat &gt; 2) tells us that we have evidence to suggest that the groups differ and in our case, the t-stat is greater than 3. The results from our bivariate linear regression confirm this finding, adding that being in the treatment group increases the probability of making a charitable donation by 0.004 percent. The third model we use to confirm our results is a probit model. The probit model confirms wht we see in both the t-test as well as the linear regression, allowing us to conclude that we have sufficient statistical evidence to conclude that the treatment has a positive effect on the likelihood of giving.</p>
-<section id="t-test-between-the-treatment-and-control-groups-on-the-binary-outcome-of-whether-any-charitable-donation-was-made." class="level4">
-<h4 class="anchored" data-anchor-id="t-test-between-the-treatment-and-control-groups-on-the-binary-outcome-of-whether-any-charitable-donation-was-made.">T-test between the treatment and control groups on the binary outcome of whether any charitable donation was made.</h4>
+<p>The demand has shows an upward trend across time. This tells us that a forecast would be best approximated using a moving average based on an appropriate window of time.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#split data into treatment and control</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>control_df <span class="ot">&lt;-</span> data[data<span class="sc">$</span>treatment <span class="sc">==</span> <span class="dv">0</span>, ]</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>treatment_df <span class="ot">&lt;-</span> data[data<span class="sc">$</span>treatment <span class="sc">==</span> <span class="dv">1</span>, ]</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create data for ttest</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>mean_control <span class="ot">&lt;-</span> <span class="fu">mean</span>(control_df<span class="sc">$</span>gave, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>sd_control <span class="ot">&lt;-</span> <span class="fu">sd</span>(control_df<span class="sc">$</span>gave, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>N_control <span class="ot">&lt;-</span> <span class="fu">length</span>(control_df<span class="sc">$</span>gave)</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>mean_treatment <span class="ot">&lt;-</span> <span class="fu">mean</span>(treatment_df<span class="sc">$</span>gave, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>sd_treatment <span class="ot">&lt;-</span> <span class="fu">sd</span>(treatment_df<span class="sc">$</span>gave, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>N_treatment <span class="ot">&lt;-</span> <span class="fu">length</span>(treatment_df<span class="sc">$</span>gave)</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate tstat</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>t_stat <span class="ot">&lt;-</span> (mean_control <span class="sc">-</span> mean_treatment) <span class="sc">/</span> <span class="fu">sqrt</span>((sd_control<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> N_control) <span class="sc">+</span> (sd_treatment<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> N_treatment))</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(t_stat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -3.209462</code></pre>
-</div>
-</div>
-</section>
-<section id="bi-variate-linear-regression-for-whether-any-charitable-donation-was-made." class="level4">
-<h4 class="anchored" data-anchor-id="bi-variate-linear-regression-for-whether-any-charitable-donation-was-made.">Bi-Variate Linear Regression for whether any charitable donation was made.</h4>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>gave_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(gave<span class="sc">~</span>treatment, <span class="at">data=</span>data)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gave_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = gave ~ treatment, data = data)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.02204 -0.02204 -0.02204 -0.01786  0.98214 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 0.017858   0.001101  16.225  &lt; 2e-16 ***
-treatment   0.004180   0.001348   3.101  0.00193 ** 
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.1422 on 50081 degrees of freedom
-Multiple R-squared:  0.000192,  Adjusted R-squared:  0.0001721 
-F-statistic: 9.618 on 1 and 50081 DF,  p-value: 0.001927</code></pre>
-</div>
-</div>
-<p><em>todo: run a probit regression where the outcome variable is whether any charitable donation was made and the explanatory variable is assignment to treatment or control. Confirm that your results replicate Table 3 column 1 in the paper.</em></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the probit regression model</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>probit <span class="ot">&lt;-</span> <span class="fu">glm</span>(gave <span class="sc">~</span> treatment, <span class="at">data =</span> data, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"probit"</span>))</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(probit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-glm(formula = gave ~ treatment, family = binomial(link = "probit"), 
-    data = data)
-
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -2.10014    0.02332 -90.074  &lt; 2e-16 ***
-treatment    0.08678    0.02788   3.113  0.00185 ** 
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 10071  on 50082  degrees of freedom
-Residual deviance: 10061  on 50081  degrees of freedom
-AIC: 10065
-
-Number of Fisher Scoring iterations: 6</code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="differences-between-match-rates" class="level3">
-<h3 class="anchored" data-anchor-id="differences-between-match-rates">Differences between Match Rates</h3>
-<p>Next, I assess the effectiveness of different sizes of matched donations on the response rate.</p>
-<p>We use a series of t-tests to test whether the size of the match ratio has an effect on whether people donate or not. Our results show that the match threshold does not have a statistically significant effect on whether or not people donate. Although this result goes against conventional wisdom, the finding aligns with what was observed in the study.</p>
-<p><em>todo: Use a series of t-tests to test whether the size of the match ratio has an effect on whether people donate or not. For example, does the 2:1 match rate lead increase the likelihood that someone donates as compared to the 1:1 match rate? Do your results support the “figures suggest” comment the authors make on page 8?</em></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a t-test on outcome1</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>test12 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(gave <span class="sc">~</span> ratio, <span class="at">data =</span> <span class="fu">subset</span>(data, ratio <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)))</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>test13 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(gave <span class="sc">~</span> ratio, <span class="at">data =</span> <span class="fu">subset</span>(data, ratio <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)))</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>test23 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(gave <span class="sc">~</span> ratio, <span class="at">data =</span> <span class="fu">subset</span>(data, ratio <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>)))</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Print results</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(test12)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Welch Two Sample t-test
-
-data:  gave by ratio
-t = -0.96505, df = 22225, p-value = 0.3345
-alternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0
-95 percent confidence interval:
- -0.005711275  0.001942773
-sample estimates:
-mean in group 1 mean in group 2 
-     0.02074912      0.02263338 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(test13)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Welch Two Sample t-test
-
-data:  gave by ratio
-t = -1.015, df = 22215, p-value = 0.3101
-alternative hypothesis: true difference in means between group 1 and group 3 is not equal to 0
-95 percent confidence interval:
- -0.005816051  0.001847501
-sample estimates:
-mean in group 1 mean in group 3 
-     0.02074912      0.02273340 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(test23)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Welch Two Sample t-test
-
-data:  gave by ratio
-t = -0.050116, df = 22261, p-value = 0.96
-alternative hypothesis: true difference in means between group 2 and group 3 is not equal to 0
-95 percent confidence interval:
- -0.004012044  0.003811996
-sample estimates:
-mean in group 2 mean in group 3 
-     0.02263338      0.02273340 </code></pre>
-</div>
-</div>
-<p><em>todo: Assess the same issue using a regression. Specifically, create the variable <code>ratio1</code> then regress <code>gave</code> on <code>ratio1</code>, <code>ratio2</code>, and <code>ratio3</code> (or alternatively, regress <code>gave</code> on the categorical variable <code>ratio</code>). Interpret the coefficients and their statistical precision.</em></p>
-<p>To test the claim that the match threshold has no significant impact on whether or not someone decides to give, we execute a logistic regression, regressing <code>gave</code> on <code>ratio1</code>, <code>ratio2</code>, and <code>ratio3</code>. This test will tell us how each ratio effects the odds of someone giving anything. The coefficient for ratio 1 is positive but not statistically significant, meaning that the effect of the 1:1 ratio is not statistically significant from the effect observed when no match is offered. The effect of ratio’s 2 and 3 are both positive and statistically significant. Notably, their coefficients are nearly exactly the same, which shows tht the difference between a 2:1 ratio and a 3:1 ratio is essentially the same.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 'ratio1' </span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ratio1 =</span> <span class="fu">as.integer</span>(ratio <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a logistic regression model</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(gave <span class="sc">~</span> ratio1 <span class="sc">+</span> ratio2 <span class="sc">+</span> ratio3, <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">data =</span> data)</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of the model</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-glm(formula = gave ~ ratio1 + ratio2 + ratio3, family = binomial(), 
-    data = data)
-
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -4.00727    0.05844 -68.565  &lt; 2e-16 ***
-ratio1       0.15299    0.08852   1.728  0.08394 .  
-ratio2       0.24184    0.08646   2.797  0.00516 ** 
-ratio3       0.24635    0.08637   2.852  0.00434 ** 
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 10071  on 50082  degrees of freedom
-Residual deviance: 10060  on 50079  degrees of freedom
-AIC: 10068
-
-Number of Fisher Scoring iterations: 6</code></pre>
-</div>
-</div>
-<p><em>todo: Calculate the response rate difference between the 1:1 and 2:1 match ratios and the 2:1 and 3:1 ratios. Do this directly from the data, and do it by computing the differences in the fitted coefficients of the previous regression. what do you conclude regarding the effectiveness of different sizes of matched donations?</em></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create data subsets</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>ratio1_data <span class="ot">&lt;-</span> data[data<span class="sc">$</span>ratio <span class="sc">==</span> <span class="dv">1</span>, ]</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>ratio2_data <span class="ot">&lt;-</span> data[data<span class="sc">$</span>ratio <span class="sc">==</span> <span class="dv">2</span>, ]</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>ratio3_data <span class="ot">&lt;-</span> data[data<span class="sc">$</span>ratio <span class="sc">==</span> <span class="dv">3</span>, ]</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean of 'gave' for the subsets</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>ratio1_rr <span class="ot">&lt;-</span> <span class="fu">mean</span>(ratio1_data<span class="sc">$</span>gave, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>ratio2_rr <span class="ot">&lt;-</span> <span class="fu">mean</span>(ratio2_data<span class="sc">$</span>gave, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>ratio3_rr <span class="ot">&lt;-</span> <span class="fu">mean</span>(ratio3_data<span class="sc">$</span>gave, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ratio1_rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.02074912</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ratio2_rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.02263338</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ratio3_rr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0227334</code></pre>
-</div>
-</div>
-</section>
-<section id="size-of-charitable-contribution" class="level3">
-<h3 class="anchored" data-anchor-id="size-of-charitable-contribution">Size of Charitable Contribution</h3>
-<p>In this subsection, I analyze the effect of the size of matched donation on the size of the charitable contribution.</p>
-<p><em>todo: Calculate a t-test or run a bivariate linear regression of the donation amount on the treatment status. What do we learn from doing this analysis?</em> To measure the effect we run a bivariate linear regression of the donation amount on the treatment status. In the summary of this regression, we see that being in the treatment group has a positive effect on the size of the matched donation that is statistically significant at the 90 percent level.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>amount_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount<span class="sc">~</span>treatment, <span class="at">data=</span>data)</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(amount_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = amount ~ treatment, data = data)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
- -0.97  -0.97  -0.97  -0.81 399.03 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.81327    0.06742  12.063   &lt;2e-16 ***
-treatment    0.15361    0.08256   1.861   0.0628 .  
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 8.709 on 50081 degrees of freedom
-Multiple R-squared:  6.911e-05, Adjusted R-squared:  4.915e-05 
-F-statistic: 3.461 on 1 and 50081 DF,  p-value: 0.06282</code></pre>
-</div>
-</div>
-<p><em>todo: now limit the data to just people who made a donation and repeat the previous analysis. This regression allows you to analyze how much respondents donate conditional on donating some positive amount. Interpret the regression coefficients – what did we learn? Does the treatment coefficient have a causal interpretation?</em></p>
-<p>Repeating the analysis above using only the data from people who made a contribution, we are able to measure how much respondents donate conditional on donating some positive amount. In this case, we see that being in the treatment group has a negative impact, however, this impact is not statistically significant. This tells us that we are unsure whether the treatment is actually effecting the amount that people decide to give. Becuase our treatment coefficient is insignificant, we cannot conclude that the treatment has any effect on the amount that people decide to give. For this reason, we conclude that we do not have sufficient evidence to state that the treatment has a causal effect on the outcome.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>givers_only <span class="ot">&lt;-</span> data[data<span class="sc">$</span>amount <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>amount_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(amount<span class="sc">~</span>treatment, <span class="at">data=</span>givers_only)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(amount_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = amount ~ treatment, data = givers_only)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--43.54 -23.87 -18.87   6.13 356.13 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   45.540      2.423  18.792   &lt;2e-16 ***
-treatment     -1.668      2.872  -0.581    0.561    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 41.83 on 1032 degrees of freedom
-Multiple R-squared:  0.0003268, Adjusted R-squared:  -0.0006419 
-F-statistic: 0.3374 on 1 and 1032 DF,  p-value: 0.5615</code></pre>
-</div>
-</div>
-<p><em>todo: Make two plot: one for the treatment group and one for the control. Each plot should be a histogram of the donation amounts only among people who donated. Add a red vertical bar or some other annotation to indicate the sample average for each plot.</em></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># control group givers</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>givers_control <span class="ot">&lt;-</span> control_df[control_df<span class="sc">$</span>amount <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean of the donation amounts</span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>mean_amount <span class="ot">&lt;-</span> <span class="fu">mean</span>(givers_control<span class="sc">$</span>amount)</span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the histogram with a vertical line indicating the mean</span></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>histogram1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(givers_control, <span class="fu">aes</span>(<span class="at">x =</span> amount)) <span class="sc">+</span></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">10</span>, <span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  <span class="co"># Histogram</span></span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> mean_amount), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span>  <span class="co"># Mean line</span></span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Donation Amounts (Control Group)"</span>,</span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Donation Amount"</span>,</span>
-<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">"Control Group Donation Amounts with Mean at $"</span>, <span class="fu">round</span>(mean_amount, <span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-ℹ Please use `linewidth` instead.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the histogram</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(histogram1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> t, <span class="at">y=</span> demand)) <span class="sc">+</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw1_questions_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># treatment group givers</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>givers_treatment <span class="ot">&lt;-</span> treatment_df[treatment_df<span class="sc">$</span>amount <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean of the donation amounts</span></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>mean_amount <span class="ot">&lt;-</span> <span class="fu">mean</span>(givers_treatment<span class="sc">$</span>amount)</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the histogram with a vertical line indicating the mean</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>histogram1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(givers_treatment, <span class="fu">aes</span>(<span class="at">x =</span> amount)) <span class="sc">+</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">10</span>, <span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  <span class="co"># Histogram</span></span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> mean_amount), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span>  <span class="co"># Mean line</span></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Donation Amounts (Treatment Group)"</span>,</span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Donation Amount"</span>,</span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">"Treatment Group Donation Amounts with Mean at $"</span>, <span class="fu">round</span>(mean_amount, <span class="dv">2</span>)))</span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the histogram</span></span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(histogram1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="hw1_questions_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="hw1_questions_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-</section>
-<section id="simulation-experiment" class="level2">
-<h2 class="anchored" data-anchor-id="simulation-experiment">Simulation Experiment</h2>
-<p>As a reminder of how the t-statistic “works,” in this section I use simulation to demonstrate the Law of Large Numbers and the Central Limit Theorem.</p>
-<p>Suppose the true distribution of respondents who <strong>do not get a charitable donation match</strong> is Bernoulli with probability p=0.018 that a donation is made.</p>
-<p>Further suppose that the true distribution of respondents who <strong>do get a charitable donation match</strong> of any size is Bernoulli with probability p=0.022 that a donation is made.</p>
-<section id="law-of-large-numbers" class="level3">
-<h3 class="anchored" data-anchor-id="law-of-large-numbers">Law of Large Numbers</h3>
-<p>This first plot is a demonstration of the Law of Large Numbers. This law states that as your sample size increases, you can expect your sample average to get closer to the true mean. To recreate this, we first simulate 10,000 draws from the control distribution and 10,000 draws from the treatment distribution. Next, we calculate a vector of 10,000 differences and then plot the cumulative average of that vector of differences. The plot shows that as we increase our sample size, the sample mean gets closer to the true mean. In our case, the sample mean never actually approaches the true difference in means. One simple way to fix this would be to increase our sample size beyond 10,000. <em>to do: Make a plot like those on slide 43 from our first class and explain the plot to the reader. To do this, you will simulate 10,000 draws from the control distribution and 10,000 draws from the treatment distribution. You’ll then calculate a vector of 10,000 differences, and then you’ll plot the cumulative average of that vector of differences. Comment on whether the cumulative average approaches the true difference in means.</em></p>
+<section id="question-1" class="level2">
+<h2 class="anchored" data-anchor-id="question-1">Question 1:</h2>
+<p>Use the data from Week1 to Week300 to estimate the slope “a” in time (t) and the intercept “b” from the linear regression model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of simulations</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co"># probability of success</span></span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>p_c <span class="ot">&lt;-</span> <span class="fl">0.018</span></span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>p_t <span class="ot">&lt;-</span> <span class="fl">0.022</span></span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="co"># True mean difference</span></span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>true_diff <span class="ot">&lt;-</span> p_t <span class="sc">-</span> p_c</span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="co"># simulated draws</span></span>
-<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
-<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>control_sim <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n,<span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p_c)</span>
-<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>treatment_sim <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n,<span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p_t)</span>
-<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate cumulative means for both simulations</span></span>
-<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>cummean_control <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(control_sim) <span class="sc">/</span> (<span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>cummean_treatment <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(treatment_sim) <span class="sc">/</span> (<span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the cumulative differences</span></span>
-<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>sample_cumdiff <span class="ot">&lt;-</span> cummean_treatment <span class="sc">-</span> cummean_control</span>
-<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for plotting</span></span>
-<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">Simulation =</span> <span class="dv">1</span><span class="sc">:</span>n,</span>
-<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">CumulativeDifference =</span> sample_cumdiff</span>
-<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the plot</span></span>
-<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> Simulation, <span class="at">y =</span> CumulativeDifference)) <span class="sc">+</span></span>
-<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span> </span>
-<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> true_diff, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span> </span>
-<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Cumulative Difference Between Treatment and Control"</span>,</span>
-<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Number of Simulations"</span>,</span>
-<span id="cb52-36"><a href="#cb52-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Cumulative Difference"</span>) <span class="sc">+</span></span>
-<span id="cb52-37"><a href="#cb52-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="hw1_questions_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the relevant columns and rows</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df[<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>,]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform linear regression</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(demand <span class="sc">~</span> t, <span class="at">data =</span> train)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the slope (a) and intercept (b)</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="st">"t"</span>]</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="st">"(Intercept)"</span>]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Slope (a):"</span>, a, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Slope (a): 4.519219 </code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Intercept (b):"</span>, b, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Intercept (b): 1919.371 </code></pre>
 </div>
 </div>
 </section>
-<section id="central-limit-theorem" class="level3">
-<h3 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h3>
-<p><em>to do: Make 4 histograms like those on slide 44 from our first class at sample sizes 50, 200, 500, and 1000 and explain these plots to the reader. To do this for a sample size of e.g.&nbsp;50, take 50 draws from each of the control and treatment distributions, and calculate the average difference between those draws. Then repeat that process 999 more times so that you have 1000 averages. Plot the histogram of those averages. Comment on whether zero is in the “middle” of the distribution or whether it’s in the “tail.”</em> To demonstrate the Central Limit Theorem we create histograms showing us the average difference between the treatment and control group from simulations of different sample sizes. The sample sizes we tested are 50, 200, 500, and 1000. As you can see in the plots, there are less observations in the tails of the data as the sample size increases. This observation validates the Central Limit Theorem because it shows that as we increase sample size the sample statistic gets closer to the true value. It is also worth noting that the value zero is in the middle of the distribution in each histogram.</p>
+<section id="question-2" class="level2">
+<h2 class="anchored" data-anchor-id="question-2">Question 2:</h2>
+<p>Use L0=b and T0=a from the above linear regression. Use alpha=0.2 and beta=0.2. Estimate the forecast from Week1 to Week 500.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of repetitions</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>reps <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Different numbers of draws</span></span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>draw_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">200</span>, <span class="dv">500</span>, <span class="dv">1000</span>)</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilities for control and treatment groups</span></span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>p_c <span class="ot">&lt;-</span> <span class="fl">0.018</span></span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>p_t <span class="ot">&lt;-</span> <span class="fl">0.022</span></span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a seed for reproducibility</span></span>
-<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
-<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over each draw size</span></span>
-<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (draws <span class="cf">in</span> draw_sizes) {</span>
-<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize a vector to store the average differences for the current draw size</span></span>
-<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>    mean_diff <span class="ot">&lt;-</span> <span class="fu">numeric</span>(reps)</span>
-<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Repeat draw and calculation for the current number of draws</span></span>
-<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>reps) {</span>
-<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate draws from Bernoulli distributions for control and treatment</span></span>
-<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a>        c_sim <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(draws, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p_c)</span>
-<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>        t_sim <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(draws, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p_t)</span>
-<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate the average difference and store it</span></span>
-<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a>        mean_diff[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(t_sim) <span class="sc">-</span> <span class="fu">mean</span>(c_sim)</span>
-<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Visualize the distribution of average differences for the current draw size</span></span>
-<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a>    plot_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">AverageDifferences =</span> mean_diff)</span>
-<span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">x =</span> AverageDifferences)) <span class="sc">+</span></span>
-<span id="cb53-32"><a href="#cb53-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"dodgerblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb53-33"><a href="#cb53-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Histogram of Average Differences for"</span>, draws, <span class="st">"Draws"</span>),</span>
-<span id="cb53-34"><a href="#cb53-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="st">"Average Difference"</span>,</span>
-<span id="cb53-35"><a href="#cb53-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
-<span id="cb53-36"><a href="#cb53-36" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>()</span>
-<span id="cb53-37"><a href="#cb53-37" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb53-38"><a href="#cb53-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(p)  <span class="co"># Display the plot</span></span>
-<span id="cb53-39"><a href="#cb53-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="hw1_questions_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize parameters</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>L0 <span class="ot">&lt;-</span> b</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>T0 <span class="ot">&lt;-</span> a</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize level, trend, and forecast</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>Lt <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>Tt <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>Ft <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Holt-Winters forecasting</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>) {</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(i <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    Lt[i] <span class="ot">&lt;-</span> alpha <span class="sc">*</span> df<span class="sc">$</span>demand[i] <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> alpha) <span class="sc">*</span> (L0 <span class="sc">+</span> T0)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    Tt[i] <span class="ot">&lt;-</span> beta <span class="sc">*</span> (Lt[i] <span class="sc">-</span> L0) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> beta) <span class="sc">*</span> T0</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    Ft[i] <span class="ot">&lt;-</span> L0 <span class="sc">+</span> T0</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (i <span class="sc">&lt;=</span> <span class="fu">nrow</span>(df)) {</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    Lt[i] <span class="ot">&lt;-</span> alpha <span class="sc">*</span> df<span class="sc">$</span>demand[i] <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> alpha) <span class="sc">*</span> (Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>])</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    Tt[i] <span class="ot">&lt;-</span> beta <span class="sc">*</span> (Lt[i] <span class="sc">-</span> Lt[i<span class="dv">-1</span>]) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> beta) <span class="sc">*</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    Ft[i] <span class="ot">&lt;-</span> Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    Lt[i] <span class="ot">&lt;-</span> Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    Tt[i] <span class="ot">&lt;-</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    Ft[i] <span class="ot">&lt;-</span> Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame to store the results</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>forecast_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Week =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, <span class="at">Forecast =</span> Ft[<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>])</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the forecast data</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forecast_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Week Forecast
+1      1 1923.890
+2      2 1940.436
+3      3 1941.815
+4      4 1896.885
+5      5 1839.186
+6      6 1840.660
+7      7 1957.772
+8      8 1884.791
+9      9 2022.135
+10    10 2077.844
+11    11 2214.098
+12    12 2167.937
+13    13 2242.491
+14    14 2135.034
+15    15 2121.908
+16    16 2151.490
+17    17 2090.096
+18    18 1996.618
+19    19 1966.890
+20    20 2081.872
+21    21 2091.343
+22    22 2015.426
+23    23 2078.635
+24    24 2050.777
+25    25 2049.340
+26    26 2100.616
+27    27 1990.733
+28    28 1938.837
+29    29 2027.206
+30    30 2113.454
+31    31 2229.074
+32    32 2344.047
+33    33 2321.183
+34    34 2253.685
+35    35 2127.979
+36    36 2050.735
+37    37 1957.311
+38    38 1964.839
+39    39 1893.267
+40    40 1956.360
+41    41 1870.739
+42    42 1907.933
+43    43 1949.491
+44    44 2026.638
+45    45 2058.570
+46    46 2153.532
+47    47 2187.641
+48    48 2290.943
+49    49 2289.146
+50    50 2232.463
+51    51 2182.458
+52    52 2211.436
+53    53 2292.440
+54    54 2293.347
+55    55 2193.338
+56    56 2079.117
+57    57 2013.336
+58    58 2007.097
+59    59 1949.783
+60    60 2048.540
+61    61 2067.484
+62    62 2147.860
+63    63 2091.926
+64    64 2056.622
+65    65 1992.354
+66    66 2145.325
+67    67 2273.449
+68    68 2415.131
+69    69 2531.830
+70    70 2459.357
+71    71 2491.004
+72    72 2440.922
+73    73 2340.259
+74    74 2252.038
+75    75 2244.540
+76    76 2143.480
+77    77 2036.933
+78    78 2031.218
+79    79 1956.037
+80    80 2030.091
+81    81 1977.410
+82    82 1916.889
+83    83 2005.477
+84    84 2078.368
+85    85 2081.266
+86    86 2222.854
+87    87 2226.530
+88    88 2256.210
+89    89 2282.746
+90    90 2317.664
+91    91 2422.412
+92    92 2404.834
+93    93 2428.659
+94    94 2479.452
+95    95 2492.988
+96    96 2518.898
+97    97 2608.389
+98    98 2691.127
+99    99 2648.552
+100  100 2571.430
+101  101 2430.196
+102  102 2336.720
+103  103 2216.671
+104  104 2314.484
+105  105 2358.556
+106  106 2312.231
+107  107 2316.482
+108  108 2306.983
+109  109 2382.865
+110  110 2412.536
+111  111 2501.611
+112  112 2605.167
+113  113 2667.085
+114  114 2755.096
+115  115 2689.661
+116  116 2671.966
+117  117 2614.532
+118  118 2613.243
+119  119 2544.963
+120  120 2492.380
+121  121 2405.058
+122  122 2293.558
+123  123 2329.216
+124  124 2228.094
+125  125 2363.152
+126  126 2282.793
+127  127 2211.074
+128  128 2171.136
+129  129 2128.900
+130  130 2204.075
+131  131 2381.612
+132  132 2382.177
+133  133 2436.102
+134  134 2548.078
+135  135 2598.736
+136  136 2671.873
+137  137 2579.427
+138  138 2520.973
+139  139 2610.132
+140  140 2644.853
+141  141 2669.836
+142  142 2777.109
+143  143 2857.403
+144  144 2766.382
+145  145 2681.990
+146  146 2609.437
+147  147 2551.297
+148  148 2511.053
+149  149 2452.056
+150  150 2552.976
+151  151 2578.033
+152  152 2642.997
+153  153 2657.928
+154  154 2600.436
+155  155 2646.585
+156  156 2763.561
+157  157 2729.599
+158  158 2823.926
+159  159 2747.430
+160  160 2634.296
+161  161 2609.177
+162  162 2492.435
+163  163 2504.344
+164  164 2632.857
+165  165 2634.274
+166  166 2609.236
+167  167 2601.716
+168  168 2555.512
+169  169 2567.448
+170  170 2669.738
+171  171 2665.782
+172  172 2702.185
+173  173 2779.300
+174  174 2852.340
+175  175 2762.399
+176  176 2839.270
+177  177 2890.276
+178  178 2990.869
+179  179 2914.389
+180  180 2968.430
+181  181 2829.605
+182  182 2800.321
+183  183 2662.081
+184  184 2666.286
+185  185 2716.158
+186  186 2756.090
+187  187 2673.191
+188  188 2733.545
+189  189 2843.206
+190  190 2829.407
+191  191 2705.271
+192  192 2692.352
+193  193 2756.722
+194  194 2833.229
+195  195 2866.786
+196  196 2750.920
+197  197 2658.991
+198  198 2773.167
+199  199 2837.382
+200  200 2933.658
+201  201 2919.213
+202  202 2840.888
+203  203 2915.473
+204  204 2816.002
+205  205 2913.745
+206  206 2977.830
+207  207 2926.544
+208  208 2864.854
+209  209 2886.748
+210  210 2837.593
+211  211 2905.525
+212  212 2780.730
+213  213 2727.025
+214  214 2622.339
+215  215 2725.138
+216  216 2663.451
+217  217 2587.563
+218  218 2714.191
+219  219 2775.605
+220  220 2869.912
+221  221 3008.961
+222  222 3132.082
+223  223 3035.816
+224  224 2954.290
+225  225 2924.698
+226  226 2831.836
+227  227 2719.153
+228  228 2741.761
+229  229 2671.977
+230  230 2729.230
+231  231 2807.424
+232  232 2856.561
+233  233 2908.129
+234  234 2888.138
+235  235 2808.580
+236  236 2766.030
+237  237 2809.949
+238  238 2951.607
+239  239 2986.708
+240  240 2983.881
+241  241 2953.944
+242  242 2863.397
+243  243 2770.623
+244  244 2864.619
+245  245 2881.151
+246  246 2996.251
+247  247 3123.721
+248  248 3166.867
+249  249 3223.470
+250  250 3301.534
+251  251 3185.643
+252  252 3238.705
+253  253 3155.046
+254  254 3211.397
+255  255 3123.342
+256  256 3200.125
+257  257 3184.386
+258  258 3045.699
+259  259 3103.922
+260  260 3180.903
+261  261 3164.692
+262  262 3050.975
+263  263 3048.003
+264  264 3084.945
+265  265 3142.701
+266  266 3201.798
+267  267 3219.363
+268  268 3144.881
+269  269 3136.940
+270  270 3029.709
+271  271 3140.777
+272  272 3216.360
+273  273 3293.371
+274  274 3206.966
+275  275 3134.683
+276  276 3210.109
+277  277 3295.246
+278  278 3206.386
+279  279 3143.242
+280  280 3201.037
+281  281 3264.232
+282  282 3333.938
+283  283 3362.386
+284  284 3327.009
+285  285 3352.547
+286  286 3247.275
+287  287 3244.607
+288  288 3120.288
+289  289 3197.821
+290  290 3106.455
+291  291 3094.304
+292  292 3167.971
+293  293 3196.586
+294  294 3256.694
+295  295 3243.553
+296  296 3237.698
+297  297 3273.826
+298  298 3355.695
+299  299 3452.203
+300  300 3337.321
+301  301 3420.243
+302  302 3277.090
+303  303 3192.405
+304  304 3282.880
+305  305 3355.225
+306  306 3310.052
+307  307 3323.152
+308  308 3345.985
+309  309 3393.853
+310  310 3344.873
+311  311 3222.534
+312  312 3263.161
+313  313 3174.377
+314  314 3285.894
+315  315 3360.152
+316  316 3329.952
+317  317 3407.795
+318  318 3377.437
+319  319 3445.933
+320  320 3349.132
+321  321 3291.687
+322  322 3252.343
+323  323 3185.774
+324  324 3194.648
+325  325 3200.481
+326  326 3175.248
+327  327 3309.452
+328  328 3200.757
+329  329 3279.691
+330  330 3247.531
+331  331 3276.501
+332  332 3228.497
+333  333 3198.554
+334  334 3216.778
+335  335 3158.165
+336  336 3100.069
+337  337 3208.589
+338  338 3334.261
+339  339 3260.789
+340  340 3379.219
+341  341 3499.315
+342  342 3448.139
+343  343 3563.432
+344  344 3495.690
+345  345 3373.668
+346  346 3436.904
+347  347 3413.257
+348  348 3466.169
+349  349 3572.212
+350  350 3632.997
+351  351 3528.266
+352  352 3597.790
+353  353 3546.058
+354  354 3489.030
+355  355 3364.046
+356  356 3276.778
+357  357 3299.131
+358  358 3233.809
+359  359 3267.359
+360  360 3308.945
+361  361 3258.015
+362  362 3238.911
+363  363 3183.232
+364  364 3148.439
+365  365 3309.507
+366  366 3450.301
+367  367 3473.524
+368  368 3562.122
+369  369 3646.875
+370  370 3603.963
+371  371 3536.474
+372  372 3529.304
+373  373 3537.797
+374  374 3510.998
+375  375 3444.120
+376  376 3389.132
+377  377 3331.777
+378  378 3309.542
+379  379 3454.692
+380  380 3405.504
+381  381 3478.774
+382  382 3495.679
+383  383 3561.415
+384  384 3615.548
+385  385 3569.792
+386  386 3499.876
+387  387 3529.308
+388  388 3513.681
+389  389 3463.153
+390  390 3494.844
+391  391 3588.083
+392  392 3559.671
+393  393 3536.394
+394  394 3542.117
+395  395 3625.731
+396  396 3615.833
+397  397 3675.441
+398  398 3719.310
+399  399 3761.912
+400  400 3815.638
+401  401 3731.793
+402  402 3794.285
+403  403 3666.548
+404  404 3711.776
+405  405 3681.167
+406  406 3545.554
+407  407 3556.241
+408  408 3594.141
+409  409 3505.815
+410  410 3485.442
+411  411 3532.646
+412  412 3549.783
+413  413 3635.061
+414  414 3610.882
+415  415 3622.903
+416  416 3598.843
+417  417 3531.522
+418  418 3541.804
+419  419 3649.158
+420  420 3783.474
+421  421 3733.189
+422  422 3716.033
+423  423 3680.506
+424  424 3765.265
+425  425 3663.062
+426  426 3731.696
+427  427 3750.776
+428  428 3710.209
+429  429 3796.987
+430  430 3746.410
+431  431 3774.292
+432  432 3674.906
+433  433 3714.480
+434  434 3726.241
+435  435 3693.360
+436  436 3808.601
+437  437 3889.969
+438  438 3959.425
+439  439 3989.853
+440  440 3949.081
+441  441 4026.981
+442  442 4092.341
+443  443 3988.255
+444  444 3897.537
+445  445 3962.780
+446  446 3950.064
+447  447 3898.208
+448  448 3754.236
+449  449 3836.288
+450  450 3764.678
+451  451 3841.363
+452  452 3769.657
+453  453 3694.786
+454  454 3686.297
+455  455 3749.374
+456  456 3740.541
+457  457 3804.533
+458  458 3840.985
+459  459 3882.067
+460  460 3946.211
+461  461 3941.317
+462  462 3993.469
+463  463 4010.452
+464  464 4108.620
+465  465 4029.250
+466  466 4015.104
+467  467 3932.103
+468  468 3944.298
+469  469 4039.882
+470  470 4118.914
+471  471 4142.223
+472  472 4160.581
+473  473 4005.445
+474  474 3981.078
+475  475 4065.821
+476  476 4077.463
+477  477 4105.638
+478  478 4152.592
+479  479 4089.412
+480  480 4152.131
+481  481 4192.142
+482  482 4262.264
+483  483 4249.392
+484  484 4130.558
+485  485 4028.389
+486  486 4069.358
+487  487 4006.919
+488  488 4031.771
+489  489 4101.061
+490  490 4080.252
+491  491 4015.474
+492  492 4088.432
+493  493 3963.662
+494  494 3997.699
+495  495 3970.981
+496  496 4060.007
+497  497 4128.588
+498  498 4122.829
+499  499 4012.549
+500  500 3892.622</code></pre>
 </div>
 </div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="hw1_questions_files/figure-html/unnamed-chunk-19-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+</section>
+<section id="question-3" class="level2">
+<h2 class="anchored" data-anchor-id="question-3">Question 3:</h2>
+<p>What is the stocking quantity at Week 301?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set exogenous values as constants</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>cost <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>salvage <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>SL <span class="ot">&lt;-</span> (price<span class="sc">-</span>cost)<span class="sc">/</span>(price<span class="sc">-</span>salvage)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the forecast to the dataframe</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">forecast_Holt =</span> Ft[<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df)],</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">forecast_error_Holt =</span> demand <span class="sc">-</span> forecast_Holt)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate safety stock and stocking quantity for Week 301</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>safety_stock <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">quantile</span>(df<span class="sc">$</span>forecast_error_Holt[<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>], SL, <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>stocking_optimal_adaptive <span class="ot">&lt;-</span> Ft[<span class="dv">301</span>] <span class="sc">+</span> safety_stock</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the stocking quantity at Week 301</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"The stocking quantity at Week 301 is: %.2f"</span>, stocking_optimal_adaptive))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The stocking quantity at Week 301 is: 3737.22</code></pre>
 </div>
 </div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="hw1_questions_files/figure-html/unnamed-chunk-19-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+</section>
+<section id="question-4" class="level2">
+<h2 class="anchored" data-anchor-id="question-4">Question 4:</h2>
+<p>What is the weekly average profit from Week301 to Week500? Do you see an improvement over simple Exponential Smoothing?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set placeholder table</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>profit <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(df), <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(profit) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Oracle"</span>, <span class="st">"Simple ES"</span>, <span class="st">"Holt"</span>, <span class="st">"Holt (tuned)"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(profit) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"day"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Oracle Simple ES Holt Holt (tuned)
+day1     NA        NA   NA           NA
+day2     NA        NA   NA           NA
+day3     NA        NA   NA           NA
+day4     NA        NA   NA           NA
+day5     NA        NA   NA           NA
+day6     NA        NA   NA           NA</code></pre>
 </div>
 </div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="hw1_questions_files/figure-html/unnamed-chunk-19-4.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># oracle</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we are assuming we have actual demand</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">301</span><span class="sc">:</span><span class="fu">nrow</span>(df)) {</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  profit[i, <span class="st">"Oracle"</span>] <span class="ot">&lt;-</span> price<span class="sc">*</span>df<span class="sc">$</span>demand[i]<span class="sc">-</span>cost<span class="sc">*</span>df<span class="sc">$</span>demand[i]</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple ES</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>L0 <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>Lt <span class="ot">&lt;-</span> <span class="fu">c</span>(); Ft <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df)) {</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(i<span class="sc">==</span><span class="dv">1</span>) {</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    Lt[i] <span class="ot">&lt;-</span> alpha<span class="sc">*</span>df<span class="sc">$</span>demand[i]<span class="sc">+</span>(<span class="dv">1</span><span class="sc">-</span>alpha)<span class="sc">*</span>L0 </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    Ft[i] <span class="ot">&lt;-</span> L0</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    Lt[i] <span class="ot">&lt;-</span> alpha<span class="sc">*</span>df<span class="sc">$</span>demand[i]<span class="sc">+</span>(<span class="dv">1</span><span class="sc">-</span>alpha)<span class="sc">*</span>Lt[i<span class="dv">-1</span>]</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    Ft[i] <span class="ot">&lt;-</span> Lt[i<span class="dv">-1</span>]</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">forecast_Simple_ES=</span>Ft,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">forecast_error_Simple_ES=</span> demand <span class="sc">-</span> forecast_Simple_ES)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># finding safety stock based on TSL</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">301</span><span class="sc">:</span><span class="fu">nrow</span>(df)) {</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  safety_stock <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">quantile</span>(df<span class="sc">$</span>forecast_error_Simple_ES[<span class="dv">1</span><span class="sc">:</span>(i<span class="dv">-1</span>)],SL,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  stocking_optimal_adaptive<span class="ot">&lt;-</span> df<span class="sc">$</span>forecast_Simple_ES[i] <span class="sc">+</span> safety_stock</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  profit[i,<span class="st">"Simple ES"</span>] <span class="ot">&lt;-</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    price<span class="sc">*</span><span class="fu">min</span>(stocking_optimal_adaptive,df<span class="sc">$</span>demand[i]) <span class="sc">-</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    cost<span class="sc">*</span>stocking_optimal_adaptive</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Holt</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">301</span><span class="sc">:</span><span class="fu">nrow</span>(df)) {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  safety_stock <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">quantile</span>(df<span class="sc">$</span>forecast_error_Holt[<span class="dv">1</span><span class="sc">:</span>(i<span class="dv">-1</span>)], SL, <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  stocking_optimal_adaptive <span class="ot">&lt;-</span> df<span class="sc">$</span>forecast_Holt[i] <span class="sc">+</span> safety_stock</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  profit[i, <span class="st">"Holt"</span>] <span class="ot">&lt;-</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    price <span class="sc">*</span> <span class="fu">min</span>(stocking_optimal_adaptive, df<span class="sc">$</span>demand[i]) <span class="sc">-</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    cost <span class="sc">*</span> stocking_optimal_adaptive</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>average_profit <span class="ot">&lt;-</span> <span class="fu">mean</span>(profit[<span class="dv">301</span><span class="sc">:</span><span class="dv">500</span>, <span class="st">"Holt"</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the weekly average profit</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"The weekly average profit from Week 301 to Week 500 is: %.2f"</span>, average_profit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The weekly average profit from Week 301 to Week 500 is: 11284.45</code></pre>
+</div>
+</div>
+<p><strong>When we calculate the average profit for a Simple Exponential Smoothing and our Holt model, we observe that the Holt model does not offer an improvement over the Simple ES.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compare average profit by forecasting method</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(profit[<span class="dv">301</span><span class="sc">:</span><span class="dv">500</span>, ], <span class="dv">2</span>, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Oracle    Simple ES         Holt Holt (tuned) 
+    11620.86     11298.89     11284.45           NA </code></pre>
+</div>
+</div>
+</section>
+<section id="question-5" class="level2">
+<h2 class="anchored" data-anchor-id="question-5">Question 5</h2>
+<p>Use the data from Week1 to Week300 to find an “optimal” alpha and beta values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to calculate MSE for given alpha and beta</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>mse_holt <span class="ot">&lt;-</span> <span class="cf">function</span>(params, predict_from, predict_to, df, L0, T0) {</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  alpha <span class="ot">&lt;-</span> params[<span class="dv">1</span>]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> params[<span class="dv">2</span>]</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  df_predict <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">slice</span>(predict_from<span class="sc">:</span>predict_to)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  df_true <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">slice</span>(predict_from<span class="sc">:</span>predict_to)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  Lt <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  Tt <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  Ft <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> predict_to <span class="sc">-</span> predict_from <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(i <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>      Lt[i] <span class="ot">&lt;-</span> alpha <span class="sc">*</span> df_predict<span class="sc">$</span>demand[i] <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> alpha) <span class="sc">*</span> (L0 <span class="sc">+</span> T0)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>      Tt[i] <span class="ot">&lt;-</span> beta <span class="sc">*</span> (Lt[i] <span class="sc">-</span> L0) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> beta) <span class="sc">*</span> T0</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>      Ft[i] <span class="ot">&lt;-</span> L0 <span class="sc">+</span> T0</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>      Lt[i] <span class="ot">&lt;-</span> alpha <span class="sc">*</span> df_predict<span class="sc">$</span>demand[i] <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> alpha) <span class="sc">*</span> (Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>])</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>      Tt[i] <span class="ot">&lt;-</span> beta <span class="sc">*</span> (Lt[i] <span class="sc">-</span> Lt[i<span class="dv">-1</span>]) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> beta) <span class="sc">*</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>      Ft[i] <span class="ot">&lt;-</span> Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>  mse <span class="ot">&lt;-</span> <span class="fu">sum</span>((df_true<span class="sc">$</span>demand <span class="sc">-</span> Ft)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> n</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(mse)</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the initial MSE value</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>initial_mse <span class="ot">&lt;-</span> <span class="fu">mse_holt</span>(<span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>), <span class="dv">1</span>, <span class="dv">300</span>, df, L0, T0)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"The initial MSE is: %.2f</span><span class="sc">\n</span><span class="st">"</span>, initial_mse))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The initial MSE is: 111095.64</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimizing alpha and beta using the optim function</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.2</span>), </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fn =</span> mse_holt, </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"L-BFGS-B"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_from =</span> <span class="dv">1</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_to =</span> <span class="dv">300</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> df,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">L0 =</span> L0,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">T0 =</span> T0,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">lower =</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.0</span>),</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">upper=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> <span class="dv">1000</span>)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$par
+[1] 0.013468860 0.000111058
+
+$value
+[1] 88371.42
+
+$counts
+function gradient 
+      49       49 
+
+$convergence
+[1] 0
+
+$message
+[1] "CONVERGENCE: REL_REDUCTION_OF_F &lt;= FACTR*EPSMCH"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract optimal alpha and beta</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  optimal_alpha <span class="ot">&lt;-</span> res<span class="sc">$</span>par[<span class="dv">1</span>]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  optimal_beta <span class="ot">&lt;-</span> res<span class="sc">$</span>par[<span class="dv">2</span>]</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print the optimal alpha and beta values</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"The optimal alpha is: %.2f</span><span class="sc">\n</span><span class="st">"</span>, optimal_alpha))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The optimal alpha is: 0.01</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"The optimal beta is: %.2f</span><span class="sc">\n</span><span class="st">"</span>, optimal_beta))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The optimal beta is: 0.00</code></pre>
+</div>
+</div>
+</section>
+<section id="question-6" class="level2">
+<h2 class="anchored" data-anchor-id="question-6">Question 6:</h2>
+<p>Use alpha and beta values from Question 5, and repeat Question 4.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize level, trend, and forecast for Holt-Winters with optimal parameters</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>Lt <span class="ot">&lt;-</span> <span class="fu">c</span>(); Tt <span class="ot">&lt;-</span> <span class="fu">c</span>(); Ft <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Holt-Winters forecasting with optimal parameters</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>) {</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(i <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    Lt[i] <span class="ot">&lt;-</span> optimal_alpha <span class="sc">*</span> df<span class="sc">$</span>demand[i] <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> optimal_alpha) <span class="sc">*</span> (L0 <span class="sc">+</span> T0)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    Tt[i] <span class="ot">&lt;-</span> optimal_beta <span class="sc">*</span> (Lt[i] <span class="sc">-</span> L0) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> optimal_beta) <span class="sc">*</span> T0</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    Ft[i] <span class="ot">&lt;-</span> L0 <span class="sc">+</span> T0</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (i <span class="sc">&lt;=</span> <span class="fu">nrow</span>(df)) {</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    Lt[i] <span class="ot">&lt;-</span> optimal_alpha <span class="sc">*</span> df<span class="sc">$</span>demand[i] <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> optimal_alpha) <span class="sc">*</span> (Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>])</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    Tt[i] <span class="ot">&lt;-</span> optimal_beta <span class="sc">*</span> (Lt[i] <span class="sc">-</span> Lt[i<span class="dv">-1</span>]) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> optimal_beta) <span class="sc">*</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    Ft[i] <span class="ot">&lt;-</span> Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    Lt[i] <span class="ot">&lt;-</span> Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>    Tt[i] <span class="ot">&lt;-</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    Ft[i] <span class="ot">&lt;-</span> Lt[i<span class="dv">-1</span>] <span class="sc">+</span> Tt[i<span class="dv">-1</span>]</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the forecast to the dataframe</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">forecast_Holt_tuned =</span> Ft[<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df)],</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">forecast_error_Holt_tuned =</span> demand <span class="sc">-</span> forecast_Holt_tuned)</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Holt-Winters profit with optimal parameters</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">301</span><span class="sc">:</span><span class="fu">nrow</span>(df)) {</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>  safety_stock <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">quantile</span>(df<span class="sc">$</span>forecast_error_Holt_tuned[<span class="dv">1</span><span class="sc">:</span>(i<span class="dv">-1</span>)], SL, <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>  stocking_optimal_adaptive <span class="ot">&lt;-</span> df<span class="sc">$</span>forecast_Holt_tuned[i] <span class="sc">+</span> safety_stock</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>  profit[i, <span class="st">"Holt (tuned)"</span>] <span class="ot">&lt;-</span> price <span class="sc">*</span> <span class="fu">min</span>(stocking_optimal_adaptive, df<span class="sc">$</span>demand[i]) <span class="sc">-</span> cost <span class="sc">*</span> stocking_optimal_adaptive</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare average profit by forecasting method</span></span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>average_profits <span class="ot">&lt;-</span> <span class="fu">apply</span>(profit[<span class="dv">301</span><span class="sc">:</span><span class="dv">500</span>, ], <span class="dv">2</span>, mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(average_profits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Oracle    Simple ES         Holt Holt (tuned) 
+    11620.86     11298.89     11284.45     11315.78 </code></pre>
 </div>
 </div>
 

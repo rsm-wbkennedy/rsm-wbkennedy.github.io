@@ -1,463 +1,332 @@
 ---
-title: "A Replication of Karlan and List (2007)"
+title: "Forecasting Demand: An Analysis of Different Methods"
 author: "Warren Kennedy"
 date: today
 callout-appearance: minimal # this hides the blue "i" icon on .callout-notes
 ---
 
-
-## Introduction
-
-Dean Karlan at Yale and John List at the University of Chicago conducted a field experiment to test the effectiveness of different fundraising letters. They sent out 50,000 fundraising letters to potential donors, randomly assigning each letter to one of three treatments: a standard letter, a matching grant letter, or a challenge grant letter. They published the results of this experiment in the _American Economic Review_ in 2007. The article and supporting data are available from the [AEA website](https://www.aeaweb.org/articles?id=10.1257/aer.97.5.1774) and from Innovations for Poverty Action as part of [Harvard's Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/27853&version=4.2).
-
-
-The experiment tests a variety of hypotheses, including whether matching donations increases the likelihood of a donation, whether the size of the match matters, and whether the size of the donation is affected by the match. To accomplish this, the authors used a variety of treatments, varying the price ratios for the match, the maximum matching grant amount, and the individual-specific ask amount. The treatments were letters used to solicit donations for a liberal politically motivated group that were sent to all 50 states. To control for spatial heterogeneity, the authors made sure that the treatment and control groups were balanced across states using demographic data, state and county election data, and data on the organization's activity level within each state. Ultimately, the authors find that matching donations increases the likelihood of a donation, however, they also find that the size of the match does not matter, and that the size of the donation is not affected by the match. 
-
-This project seeks to replicate their results.
-
-
-## Data
-
-### Description
-
- 
-```{r}
-# read the data 
-library(haven)
-data <- read_dta("/home/jovyan/My_Quarto_Website/projects/project1/karlan_list_2007.dta")
-
-# summarize treatment/control split
-treatment_perc <- mean(data$treatment)
-control_perc <-mean(data$control)
-
-# Print the result
-print(treatment_perc)
-print(control_perc)
-```
-
-```{r}
-# Create tables to show the distributions of the treatment features
-library(dplyr)
-ratio_counts <- data %>%
-  count(ratio) %>%
-  mutate(percentage = round(n / sum(n) * 100,2))
-
-size_counts <- data %>%
-  count(size) %>%
-  mutate(percentage = round(n / sum(n) * 100,2))
-
-ask_counts <- data %>%
-  count(ask) %>%
-  mutate(percentage = round(n / sum(n) * 100,2))
-
-# Print the result
-print(ratio_counts)
-print(ask_counts)
-print(size_counts)
-
-```
-
-
-:::: {.callout-note collapse="true"}
-### Variable Definitions
-
-| Variable             | Description                                                         |
-|----------------------|---------------------------------------------------------------------|
-| `treatment`          | Treatment                                                           |
-| `control`            | Control                                                             |
-| `ratio`              | Match ratio                                                         |
-| `ratio2`             | 2:1 match ratio                                                     |
-| `ratio3`             | 3:1 match ratio                                                     |
-| `size`               | Match threshold                                                     |
-| `size25`             | \$25,000 match threshold                                            |
-| `size50`             | \$50,000 match threshold                                            |
-| `size100`            | \$100,000 match threshold                                           |
-| `sizeno`             | Unstated match threshold                                            |
-| `ask`                | Suggested donation amount                                           |
-| `askd1`              | Suggested donation was highest previous contribution                |
-| `askd2`              | Suggested donation was 1.25 x highest previous contribution         |
-| `askd3`              | Suggested donation was 1.50 x highest previous contribution         |
-| `ask1`               | Highest previous contribution (for suggestion)                      |
-| `ask2`               | 1.25 x highest previous contribution (for suggestion)               |
-| `ask3`               | 1.50 x highest previous contribution (for suggestion)               |
-| `amount`             | Dollars given                                                       |
-| `gave`               | Gave anything                                                       |
-| `amountchange`       | Change in amount given                                              |
-| `hpa`                | Highest previous contribution                                       |
-| `ltmedmra`           | Small prior donor: last gift was less than median \$35              |
-| `freq`               | Number of prior donations                                           |
-| `years`              | Number of years since initial donation                              |
-| `year5`              | At least 5 years since initial donation                             |
-| `mrm2`               | Number of months since last donation                                |
-| `dormant`            | Already donated in 2005                                             |
-| `female`             | Female                                                              |
-| `couple`             | Couple                                                              |
-| `state50one`         | State tag: 1 for one observation of each of 50 states; 0 otherwise  |
-| `nonlit`             | Nonlitigation                                                       |
-| `cases`              | Court cases from state in 2004-5 in which organization was involved |
-| `statecnt`           | Percent of sample from state                                        |
-| `stateresponse`      | Proportion of sample from the state who gave                        |
-| `stateresponset`     | Proportion of treated sample from the state who gave                |
-| `stateresponsec`     | Proportion of control sample from the state who gave                |
-| `stateresponsetminc` | stateresponset - stateresponsec                                     |
-| `perbush`            | State vote share for Bush                                           |
-| `close25`            | State vote share for Bush between 47.5% and 52.5%                   |
-| `red0`               | Red state                                                           |
-| `blue0`              | Blue state                                                          |
-| `redcty`             | Red county                                                          |
-| `bluecty`            | Blue county                                                         |
-| `pwhite`             | Proportion white within zip code                                    |
-| `pblack`             | Proportion black within zip code                                    |
-| `page18_39`          | Proportion age 18-39 within zip code                                |
-| `ave_hh_sz`          | Average household size within zip code                              |
-| `median_hhincome`    | Median household income within zip code                             |
-| `powner`             | Proportion house owner within zip code                              |
-| `psch_atlstba`       | Proportion who finished college within zip code                     |
-| `pop_propurban`      | Proportion of population urban within zip code                      |
-
-::::
-
-
-### Balance Test 
-
-As an ad hoc test of the randomization mechanism, I provide a series of tests that compare aspects of the treatment and control groups to assess whether they are statistically significantly different from one another.
-
-We test for a difference in means using both the t-test method and separately the linear regression method. In this case, we use both methods to confirm what we are seeing, however, both methods will ultimately produce the same result. Comparing the means of both the `couple` and `pwhite` variables respectively, we see that there is no statistically significant difference between the observations in the treatment and control groups. We tested this hypothesis for each variable at a 95% confidence level. These results give us the confidence to conclude that we do not have the statistical evidence to reject the null hypothesis that there is no difference in the means between the two groups.
-
-#### Comparing Means for `couple`
-```{r}
-#split data into treatment and control
-control_df <- data[data$treatment == 0, ]
-treatment_df <- data[data$treatment == 1, ]
-
-# create data for ttest
-mean_control <- mean(control_df$couple, na.rm = TRUE)
-sd_control <- sd(control_df$couple, na.rm = TRUE)
-N_control <- length(control_df$couple)
-
-mean_treatment <- mean(treatment_df$couple, na.rm = TRUE)
-sd_treatment <- sd(treatment_df$couple, na.rm = TRUE)
-N_treatment <- length(treatment_df$couple)
-  
-# calculate tstat
-t_stat <- (mean_control - mean_treatment) / sqrt((sd_control^2 / N_control) + (sd_treatment^2 / N_treatment))
-print(t_stat)
-```
-```{r}
-couple_lm <- lm(couple~treatment, data=data)
-summary(couple_lm)
-```
-
-#### Comparing Means for `pwhite`
-```{r}
-#split data into treatment and control
-control_df <- data[data$treatment == 0, ]
-treatment_df <- data[data$treatment == 1, ]
-
-# create data for ttest
-mean_control <- mean(control_df$pwhite, na.rm = TRUE)
-sd_control <- sd(control_df$pwhite, na.rm = TRUE)
-N_control <- length(control_df$pwhite)
-
-mean_treatment <- mean(treatment_df$pwhite, na.rm = TRUE)
-sd_treatment <- sd(treatment_df$pwhite, na.rm = TRUE)
-N_treatment <- length(treatment_df$pwhite)
-  
-# calculate tstat
-t_stat <- (mean_control - mean_treatment) / sqrt((sd_control^2 / N_control) + (sd_treatment^2 / N_treatment))
-print(t_stat)
-```
-#### Linear Regression for `pwhite`
-```{r}
-pwhite_lm <- lm(pwhite~treatment, data=data)
-summary(pwhite_lm)
-```
-
-
-## Experimental Results
-
-### Charitable Contribution Made
-
-First, I analyze whether matched donations lead to an increased response rate of making a donation. 
-
-Using a barplot to visually represen the outcome, we first observe the proportion of people who donated using one bar for treatment and one bar for control. Based on the bar plot below, there is a clear difference in the outcome: the treatement group has a higher proportion of people who donated than the control group. The barplot gives us reason to believe that the treatment may have a causal impact on the outcome of giving. Next, we test this hypothesis using statistical methods. 
-```{r}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(ggplot2)
-
-# Calculating proportions
-donation_summary <- data %>%
-  group_by(treatment) %>%
-  summarise(proportion_donated = mean(gave))
-
-# Ensure 'treatment' is a factor
-donation_summary$treatment <- as.factor(donation_summary$treatment)
-
-# Plotting the proportions
-ggplot(donation_summary, aes(x = treatment, y = proportion_donated, fill = treatment)) +
-  geom_col() +  
-  scale_fill_manual(values = c("blue", "red")) + 
-  labs(title = "Proportion of People Who Donated by Treatment Status",
-       x = "Treatment Status",
-       y = "Proportion that Donated") +
-  theme_minimal()  
-
 ```
 
 
-We can test our hypothesis by using a t-test to compare the proportions observed between the treatment and control groups. As we have done before, we will confirm the results from our t-test using a bivariate linear regression to demonstrate the same finding. 
+## Introduction
+In this report, we present an analysis of various forecasting methods applied to a dataset containing the demand for eggs from Week 1 to Week 500. We compared four forecasting techniques: Oracle (theoretical maximum profit), Simple Exponential Smoothing (Simple ES), Holt's Linear Trend Method (Holt), and a tuned version of Holt's method (Holt tuned). Our goal was to determine which method provides the best forecast accuracy and profitability.
 
-The hypothesis we seek to test is whether or not the proportion of people who gave is the same in both the treatment and the control groups. The result from our t-test is that the treatment group is substantially different from the control group. A large t-stat(t-stat > 2) tells us that we have evidence to suggest that the groups differ and in our case, the t-stat is greater than 3. The results from our bivariate linear regression confirm this finding, adding that being in the treatment group increases the probability of making a charitable donation by 0.004 percent. The third model we use to confirm our results is a probit model. The probit model confirms wht we see in both the t-test as well as the linear regression, allowing us to conclude that we have sufficient statistical evidence to conclude that the treatment has a positive effect on the likelihood of giving.
+## Methodology
+The Oracle method represents the theoretical maximum possible profit, assuming perfect knowledge of future demand. It serves as a benchmark for comparing other forecasting methods. The profit calculation for the Oracle method uses the actual demand directly, thus providing the upper bound for potential profitability. 
 
-#### T-test between the treatment and control groups on the binary outcome of whether any charitable donation was made.
-```{r}
-#split data into treatment and control
-control_df <- data[data$treatment == 0, ]
-treatment_df <- data[data$treatment == 1, ]
+Simple Exponential Smoothing (Simple ES) is a basic forecasting method that uses a smoothing parameter (alpha) to weight the most recent observations. We initially set alpha to 0.2 and calculated forecasts for the dataset. This method helps to smooth out short-term fluctuations and highlight longer-term trends or cycles. Additionally, we calculated the profit using a safety stock based on the forecast errors, ensuring that inventory levels could meet unexpected demand spikes.
 
-# create data for ttest
-mean_control <- mean(control_df$gave, na.rm = TRUE)
-sd_control <- sd(control_df$gave, na.rm = TRUE)
-N_control <- length(control_df$gave)
+Holt's Linear Trend Method (Holt) extends Simple ES by incorporating a trend component, making it suitable for data with a trend. Initially, we used default values for the smoothing parameters (alpha = 0.2, beta = 0.2). This method accounts for both the level of the series and the trend, thus providing a more nuanced forecast than Simple ES. We calculated the forecasts and profits in a manner similar to Simple ES, but with the added benefit of trend adjustment.
 
-mean_treatment <- mean(treatment_df$gave, na.rm = TRUE)
-sd_treatment <- sd(treatment_df$gave, na.rm = TRUE)
-N_treatment <- length(treatment_df$gave)
-  
-# calculate tstat
-t_stat <- (mean_control - mean_treatment) / sqrt((sd_control^2 / N_control) + (sd_treatment^2 / N_treatment))
-print(t_stat)
-```
+To improve the forecast accuracy of Holt's method, we optimized the smoothing parameters (alpha and beta) using a grid search approach to minimize the Mean Squared Error (MSE). By tuning these parameters, we aimed to enhance the method's responsiveness to changes in the data and reduce forecast errors. Using these optimized parameters, we recalculated the forecasts and profits, labeling this version as Holt tuned.
 
-#### Bi-Variate Linear Regression for whether any charitable donation was made.
-```{r}
-gave_lm <- lm(gave~treatment, data=data)
-summary(gave_lm)
-```
+## Results
+We compared the average weekly profit from Week 301 to Week 500 for each method. The Oracle method, as expected, provided the highest possible profit since it is based on perfect foresight. Simple ES initially performed well, offering better forecasts than Holt's default settings due to its simplicity and effectiveness in smoothing random variations in the data. However, when we tuned the parameters of Holt's method, it showed a significant improvement in forecast accuracy and profitability, ultimately outperforming Simple ES.
 
+Holt's default settings initially did not provide as high a profit as Simple ES, but after parameter optimization, Holt tuned demonstrated superior performance. This highlights the importance of fine-tuning forecasting models to better capture the underlying patterns in the data.
 
-```{r}
-# Fit the probit regression model
-probit <- glm(gave ~ treatment, data = data, family = binomial(link = "probit"))
-summary(probit)
+## Conclusion
+The analysis demonstrated that while Simple Exponential Smoothing performed well initially, tuning the parameters of Holt's Linear Trend Method resulted in superior forecasts and higher profitability. This underscores the importance of parameter optimization in forecasting models to achieve the best possible performance. 
 
-```
+By leveraging these findings, organizations can enhance their demand forecasting accuracy and optimize inventory management, leading to improved financial outcomes. Accurate forecasts help in maintaining optimal inventory levels, reducing holding costs, and minimizing stockouts, thereby contributing to overall operational efficiency and customer satisfaction. This study illustrates the practical benefits of applying sophisticated forecasting techniques and the value of continuous improvement through model tuning.
 
+# Appendix
 
-### Differences between Match Rates
-
-Next, I assess the effectiveness of different sizes of matched donations on the response rate.
-
-We use a series of t-tests to test whether the size of the match ratio has an effect on whether people donate or not. Our results show that the match threshold does not have a statistically significant effect on whether or not people donate. Although this result goes against conventional wisdom, the finding aligns with what was observed in the study.
-
-```{r}
-# Perform a t-test on outcome1
-test12 <- t.test(gave ~ ratio, data = subset(data, ratio %in% c(1, 2)))
-test13 <- t.test(gave ~ ratio, data = subset(data, ratio %in% c(1, 3)))
-test23 <- t.test(gave ~ ratio, data = subset(data, ratio %in% c(2, 3)))
-
-# Print results
-print(test12)
-print(test13)
-print(test23)
-
-```
-
-To test the claim that the match threshold has no significant impact on whether or not someone decides to give, we execute a logistic regression, regressing `gave` on `ratio1`, `ratio2`, and `ratio3`. This test will tell us how each ratio effects the odds of someone giving anything. The coefficient for ratio 1 is positive but not statistically significant, meaning that the effect of the 1:1 ratio is not statistically significant from the effect observed when no match is offered. The effect of ratio's 2 and 3 are both positive and statistically significant. Notably, their coefficients are nearly exactly the same, which shows that the difference between a 2:1 ratio and a 3:1 ratio is essentially the same.
-```{r}
-# Create 'ratio1' 
-data <- data %>%
-  mutate(ratio1 = as.integer(ratio == 1))
-
-# Fit a logistic regression model
-model <- lm(gave ~ ratio1 + ratio2 + ratio3, data = data)
-
-# Summary of the model
-summary(model)
-```
-
-
-```{r}
-# create data subsets
-ratio1_data <- data[data$ratio == 1, ]
-ratio2_data <- data[data$ratio == 2, ]
-ratio3_data <- data[data$ratio == 3, ]
-
-# Calculate the mean of 'gave' for the subsets
-ratio1_rr <- mean(ratio1_data$gave, na.rm = TRUE) 
-ratio2_rr <- mean(ratio2_data$gave, na.rm = TRUE) 
-ratio3_rr <- mean(ratio3_data$gave, na.rm = TRUE) 
-
-print(ratio1_rr)
-print(ratio2_rr)
-print(ratio3_rr)
-```
-
-
-### Size of Charitable Contribution
-
-In this subsection, I analyze the effect of the size of matched donation on the size of the charitable contribution.
-
-```{r}
-amount_lm <- lm(amount~treatment, data=data)
-summary(amount_lm)
-```
-
-
-Repeating the analysis above using only the data from people who made a contribution, we are able to measure how much respondents donate conditional on donating some positive amount. In this case, we see that being in the treatment group has a negative impact, however, this impact is not statistically significant. This tells us that we are unsure whether the treatment is actually effecting the amount that people decide to give. Becuase our treatment coefficient is insignificant, we cannot conclude that the treatment has any effect on the amount that people decide to give. For this reason, we conclude that we do not have sufficient evidence to state that  the treatment has a causal effect on the outcome.
-```{r}
-givers_only <- data[data$amount > 0, ]
-amount_lm <- lm(amount~treatment, data=givers_only)
-summary(amount_lm)
+```{r cars}
+df <- read.csv("~/MGTA456/Homework/Homework2/forecasting_demand_data_2024.csv")
+df <- df[, 1:2]
 ```
 
 ```{r}
-# control group givers
-givers_control <- control_df[control_df$amount > 0, ]
+# add time trend
+df <- df %>%
+  mutate(t=row_number()) %>%
+  as_tibble()
 
-# Calculate the mean of the donation amounts
-mean_amount <- mean(givers_control$amount)
-
-# Creating the histogram with a vertical line indicating the mean
-histogram1 <- ggplot(givers_control, aes(x = amount)) +
-  geom_histogram(binwidth = 10, fill = "blue", color = "black") +  # Histogram
-  geom_vline(aes(xintercept = mean_amount), color = "red", linetype = "dashed", size = 1) +  # Mean line
-  labs(title = "Donation Amounts (Control Group)",
-       x = "Donation Amount",
-       y = "Frequency") +
-  theme_minimal() +
-  ggtitle(paste("Control Group Donation Amounts with Mean at $", round(mean_amount, 2)))
-
-# Print the histogram
-print(histogram1)
-
-```
-```{r}
-# treatment group givers
-givers_treatment <- treatment_df[treatment_df$amount > 0, ]
-
-# Calculate the mean of the donation amounts
-mean_amount <- mean(givers_treatment$amount)
-
-# Creating the histogram with a vertical line indicating the mean
-histogram1 <- ggplot(givers_treatment, aes(x = amount)) +
-  geom_histogram(binwidth = 10, fill = "blue", color = "black") +  # Histogram
-  geom_vline(aes(xintercept = mean_amount), color = "red", linetype = "dashed", size = 1) +  # Mean line
-  labs(title = "Donation Amounts (Treatment Group)",
-       x = "Donation Amount",
-       y = "Frequency") +
-  theme_minimal() +
-  ggtitle(paste("Treatment Group Donation Amounts with Mean at $", round(mean_amount, 2)))
-
-# Print the histogram
-print(histogram1)
+# descriptives
+summary(df)
 
 ```
 
-## Simulation Experiment
+### Including Plots
 
-As a reminder of how the t-statistic "works," in this section I use simulation to demonstrate the Law of Large Numbers and the Central Limit Theorem.
+The data is not normally distributed.
 
-Suppose the true distribution of respondents who **do not get a charitable donation match** is Bernoulli with probability p=0.018 that a donation is made. 
-
-Further suppose that the true distribution of respondents who **do get a charitable donation match** of any size  is Bernoulli with probability p=0.022 that a donation is made.
-
-### Law of Large Numbers
-
-This first plot is a demonstration of the Law of Large Numbers. This law states that as your sample size increases, you can expect your sample average to get closer to the true mean. To recreate this, we first simulate 10,000 draws from the control distribution and 10,000 draws from the treatment distribution. Next, we calculate a vector of 10,000 differences and then plot the cumulative average of that vector of differences. The plot shows that as we increase our sample size, the sample mean gets closer to the true mean. In our case, the sample mean never actually approaches the true difference in means. One simple way to fix this would be to increase our sample size beyond 10,000. 
+```{r , echo=FALSE}
+df %>%
+  ggplot(aes(x=demand)) +
+  geom_histogram(bins = 50)
+```
+The demand has shows an upward trend across time. This tells us that a forecast would be best approximated using a moving average based on an appropriate window of time.
 
 ```{r}
-# number of simulations
-n <- 10000
+df %>%
+  ggplot(aes(x= t, y= demand)) + 
+  geom_line()
+```
+## Question 1:
+Use the data from Week1 to Week300 to estimate the slope “a” in time (t) and the intercept “b” from the linear regression model.
 
-# probability of success
-p_c <- 0.018
-p_t <- 0.022
+```{r}
+# Filter the relevant columns and rows
+train <- df[1:300,]
 
-# True mean difference
-true_diff <- p_t - p_c
+# Perform linear regression
+model <- lm(demand ~ t, data = train)
 
-# simulated n draws for treatment and control
-set.seed(10)
-control_sim <- rbinom(n,size = 1, prob = p_c)
-treatment_sim <- rbinom(n,size = 1, prob = p_t)
+# Get the slope (a) and intercept (b)
+a <- coef(model)["t"]
+b <- coef(model)["(Intercept)"]
 
-# Calculate cumulative means for both simulations
-cummean_control <- cumsum(control_sim) / (1:n)
-cummean_treatment <- cumsum(treatment_sim) / (1:n)
+# Print the results
+cat("Slope (a):", a, "\n")
+cat("Intercept (b):", b, "\n")
 
-# Calculate the cumulative differences
-sample_cumdiff <- cummean_treatment - cummean_control
-
-# Create a data frame for plotting
-plot_data <- data.frame(
-  Simulation = 1:n,
-  CumulativeDifference = sample_cumdiff
-)
-
-
-# Generate the plot
-ggplot(plot_data, aes(x = Simulation, y = CumulativeDifference)) +
-  geom_line(color = "red") + 
-  geom_hline(yintercept = true_diff, linetype = "dashed", color = "blue") + 
-  labs(title = "Cumulative Difference Between Treatment and Control",
-       x = "Number of Simulations",
-       y = "Cumulative Difference") +
-  theme_minimal()
 ```
 
+## Question 2:
+Use L0=b and T0=a from the above linear regression. Use alpha=0.2 and beta=0.2. Estimate the forecast from Week1 to Week 500.
 
-### Central Limit Theorem
-
-To demonstrate the Central Limit Theorem we create histograms showing us the average difference between the treatment and control group from simulations of different sample sizes. The sample sizes we tested are 50, 200, 500, and 1000. As you can see in the plots, there are less observations in the tails of the data as the sample size increases. This observation validates the Central Limit Theorem because it shows that as we increase sample size the sample statistic gets closer to the true value. It is also worth noting that the value zero is in the middle of the distribution in each histogram. 
 ```{r}
-# Number of repetitions
-reps <- 1000
+# Initialize parameters
+L0 <- b
+T0 <- a
+alpha <- 0.2
+beta <- 0.2
 
-# Different numbers of draws
-draw_sizes <- c(50, 200, 500, 1000)
+# Initialize level, trend, and forecast
+Lt <- c()
+Tt <- c()
+Ft <- c()
 
-# Probabilities for control and treatment groups
-p_c <- 0.018
-p_t <- 0.022
-
-# Set a seed for reproducibility
-set.seed(10)
-
-# Loop over each draw size
-for (draws in draw_sizes) {
-    # Initialize a vector to store the average differences for the current draw size
-    mean_diff <- numeric(reps)
-    
-    # Repeat draw and calculation for the current number of draws
-    for (i in 1:reps) {
-        # Simulate draws from Bernoulli distributions for control and treatment
-        c_sim <- rbinom(draws, size = 1, prob = p_c)
-        t_sim <- rbinom(draws, size = 1, prob = p_t)
-    
-        # Calculate the average difference and store it
-        mean_diff[i] <- mean(t_sim) - mean(c_sim)
-    }
-    
-    # Visualize the distribution of average differences for the current draw size
-    plot_data <- data.frame(AverageDifferences = mean_diff)
-    p <- ggplot(plot_data, aes(x = AverageDifferences)) +
-        geom_histogram(bins = 30, fill = "dodgerblue", color = "black") +
-        labs(title = paste("Histogram of Average Differences for", draws, "Draws"),
-             x = "Average Difference",
-             y = "Frequency") +
-        theme_minimal()
-    
-    print(p)  # Display the plot
+# Holt-Winters forecasting
+for (i in 1:500) {
+  if(i == 1) {
+    Lt[i] <- alpha * df$demand[i] + (1 - alpha) * (L0 + T0)
+    Tt[i] <- beta * (Lt[i] - L0) + (1 - beta) * T0
+    Ft[i] <- L0 + T0
+  } else if (i <= nrow(df)) {
+    Lt[i] <- alpha * df$demand[i] + (1 - alpha) * (Lt[i-1] + Tt[i-1])
+    Tt[i] <- beta * (Lt[i] - Lt[i-1]) + (1 - beta) * Tt[i-1]
+    Ft[i] <- Lt[i-1] + Tt[i-1]
+  } else {
+    Lt[i] <- Lt[i-1] + Tt[i-1]
+    Tt[i] <- Tt[i-1]
+    Ft[i] <- Lt[i-1] + Tt[i-1]
+  }
 }
 
+# Create a data frame to store the results
+forecast_df <- data.frame(Week = 1:500, Forecast = Ft[1:500])
+
+# Print the forecast data
+print(forecast_df)
+
+```
+
+## Question 3:
+What is the stocking quantity at Week 301?
+
+```{r}
+# set exogenous values as constants
+price <- 4
+cost <- 0.8
+salvage <- 0
+SL <- (price-cost)/(price-salvage)
+
+# Add the forecast to the dataframe
+df <- df %>%
+  dplyr::mutate(forecast_Holt = Ft[1:nrow(df)],
+                forecast_error_Holt = demand - forecast_Holt)
+
+# Calculate safety stock and stocking quantity for Week 301
+safety_stock <- as.numeric(quantile(df$forecast_error_Holt[1:300], SL, na.rm=TRUE))
+stocking_optimal_adaptive <- Ft[301] + safety_stock
+
+# Print the stocking quantity at Week 301
+cat(sprintf("The stocking quantity at Week 301 is: %.2f", stocking_optimal_adaptive))
+```
+
+## Question 4:
+What is the weekly average profit from Week301 to Week500? Do you see an improvement over simple Exponential Smoothing?
+```{r}
+# set placeholder table
+profit <- matrix(NA, nrow = nrow(df), ncol = 4)
+colnames(profit) <- c("Oracle", "Simple ES", "Holt", "Holt (tuned)")
+rownames(profit) <- paste0("day", 1:nrow(df))
+head(profit)
+```
+```{r}
+# oracle
+# we are assuming we have actual demand
+for(i in 301:nrow(df)) {
+  profit[i, "Oracle"] <- price*df$demand[i]-cost*df$demand[i]
+}
+```
+
+```{r}
+# Simple ES
+L0 <- 2000
+alpha <- 0.2
+Lt <- c(); Ft <- c()
+for (i in 1:nrow(df)) {
+  if(i==1) {
+    Lt[i] <- alpha*df$demand[i]+(1-alpha)*L0 
+    Ft[i] <- L0
+  } else {
+    Lt[i] <- alpha*df$demand[i]+(1-alpha)*Lt[i-1]
+    Ft[i] <- Lt[i-1]
+  }
+}
+df <- df %>%
+  dplyr::mutate(forecast_Simple_ES=Ft,
+                forecast_error_Simple_ES= demand - forecast_Simple_ES)
+
+# finding safety stock based on TSL
+for (i in 301:nrow(df)) {
+  safety_stock <- as.numeric(quantile(df$forecast_error_Simple_ES[1:(i-1)],SL,na.rm=TRUE))
+  stocking_optimal_adaptive<- df$forecast_Simple_ES[i] + safety_stock
+  profit[i,"Simple ES"] <-
+    price*min(stocking_optimal_adaptive,df$demand[i]) -
+    cost*stocking_optimal_adaptive
+}
 
 ```
 
 
+```{r}
+# Holt
+for (i in 301:nrow(df)) {
+  safety_stock <- as.numeric(quantile(df$forecast_error_Holt[1:(i-1)], SL, na.rm=TRUE))
+  stocking_optimal_adaptive <- df$forecast_Holt[i] + safety_stock
+  profit[i, "Holt"] <-
+    price * min(stocking_optimal_adaptive, df$demand[i]) -
+    cost * stocking_optimal_adaptive
+}
+
+average_profit <- mean(profit[301:500, "Holt"], na.rm=TRUE)
+
+# Print the weekly average profit
+cat(sprintf("The weekly average profit from Week 301 to Week 500 is: %.2f", average_profit))
+```
+**When we calculate the average profit for a Simple Exponential Smoothing and our Holt model, we observe that the Holt model does not offer an improvement over the Simple ES.**
+```{r}
+# compare average profit by forecasting method
+apply(profit[301:500, ], 2, mean)
+```
+
+## Question 5
+Use the data from Week1 to Week300 to find an “optimal” alpha and beta values.
+
+```{r}
+# Function to calculate MSE for given alpha and beta
+mse_holt <- function(params, predict_from, predict_to, df, L0, T0) {
+  alpha <- params[1]
+  beta <- params[2]
+  
+  df_predict <- df %>%
+    dplyr::slice(predict_from:predict_to)
+  df_true <- df %>%
+    dplyr::slice(predict_from:predict_to)
+  
+  Lt <- c()
+  Tt <- c()
+  Ft <- c()
+  n <- predict_to - predict_from + 1
+  
+  for (i in 1:n) {
+    if(i == 1) {
+      Lt[i] <- alpha * df_predict$demand[i] + (1 - alpha) * (L0 + T0)
+      Tt[i] <- beta * (Lt[i] - L0) + (1 - beta) * T0
+      Ft[i] <- L0 + T0
+    } else {
+      Lt[i] <- alpha * df_predict$demand[i] + (1 - alpha) * (Lt[i-1] + Tt[i-1])
+      Tt[i] <- beta * (Lt[i] - Lt[i-1]) + (1 - beta) * Tt[i-1]
+      Ft[i] <- Lt[i-1] + Tt[i-1]
+    }
+  }
+  
+  mse <- sum((df_true$demand - Ft)^2) / n
+  return(mse)
+}
+```
+
+```{r}
+# Check the initial MSE value
+initial_mse <- mse_holt(c(0.2, 0.2), 1, 300, df, L0, T0)
+cat(sprintf("The initial MSE is: %.2f\n", initial_mse))
+```
 
 
+```{r}
+# Optimizing alpha and beta using the optim function
+res <- optim(
+  par = c(0.2, 0.2), 
+  fn = mse_holt, 
+  method = "L-BFGS-B",
+  predict_from = 1,
+  predict_to = 300,
+  df = df,
+  L0 = L0,
+  T0 = T0,
+  lower = c(0.01,0.0),
+  upper=c(1,1),
+  control = list(maxit = 1000)
+)
 
+res
+```
+```{r}
+  # Extract optimal alpha and beta
+  optimal_alpha <- res$par[1]
+  optimal_beta <- res$par[2]
+  
+  # Print the optimal alpha and beta values
+  cat(sprintf("The optimal alpha is: %.2f\n", optimal_alpha))
+  cat(sprintf("The optimal beta is: %.2f\n", optimal_beta))
+```
+## Question 6:
+Use alpha and beta values from Question 5, and repeat Question 4.
+```{r}
+# Initialize level, trend, and forecast for Holt-Winters with optimal parameters
+Lt <- c(); Tt <- c(); Ft <- c()
 
+# Holt-Winters forecasting with optimal parameters
+for (i in 1:500) {
+  if(i == 1) {
+    Lt[i] <- optimal_alpha * df$demand[i] + (1 - optimal_alpha) * (L0 + T0)
+    Tt[i] <- optimal_beta * (Lt[i] - L0) + (1 - optimal_beta) * T0
+    Ft[i] <- L0 + T0
+  } else if (i <= nrow(df)) {
+    Lt[i] <- optimal_alpha * df$demand[i] + (1 - optimal_alpha) * (Lt[i-1] + Tt[i-1])
+    Tt[i] <- optimal_beta * (Lt[i] - Lt[i-1]) + (1 - optimal_beta) * Tt[i-1]
+    Ft[i] <- Lt[i-1] + Tt[i-1]
+  } else {
+    Lt[i] <- Lt[i-1] + Tt[i-1]
+    Tt[i] <- Tt[i-1]
+    Ft[i] <- Lt[i-1] + Tt[i-1]
+  }
+}
 
+# Add the forecast to the dataframe
+df <- df %>%
+  dplyr::mutate(forecast_Holt_tuned = Ft[1:nrow(df)],
+                forecast_error_Holt_tuned = demand - forecast_Holt_tuned)
+
+# Calculate Holt-Winters profit with optimal parameters
+for (i in 301:nrow(df)) {
+  safety_stock <- as.numeric(quantile(df$forecast_error_Holt_tuned[1:(i-1)], SL, na.rm=TRUE))
+  stocking_optimal_adaptive <- df$forecast_Holt_tuned[i] + safety_stock
+  profit[i, "Holt (tuned)"] <- price * min(stocking_optimal_adaptive, df$demand[i]) - cost * stocking_optimal_adaptive
+}
+
+# Compare average profit by forecasting method
+average_profits <- apply(profit[301:500, ], 2, mean, na.rm=TRUE)
+print(average_profits)
+
+```
 

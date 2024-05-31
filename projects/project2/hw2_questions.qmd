@@ -401,16 +401,16 @@ poisson_reg_ll <- function(beta, X2, y2){
 
 ```{r}
 ## Use optim() to find the MLE vector and the Hessian
-out <- optim(par = rep(0, ncol(X2)), fn = poisson_reg_ll, X = X2, y = y2, hessian = TRUE, control = list(fnscale = -1), method = 'BFGS')
+#out <- optim(par = rep(0, ncol(X2)), fn = poisson_reg_ll, X = X2, y = y2, hessian = TRUE, control = list(fnscale = -1), method = 'BFGS')
 
 
 ## Calculate standard errors of beta parameter estimates
-Hinv <- -solve(out$hessian)
-results <- cbind(coefs = out$par, sterr = sqrt(diag(Hinv)))
-rownames(results) <- colnames(X2)
-results <- round(results, 4)
+#Hinv <- -solve(out$hessian)
+#results <- cbind(coefs = out$par, sterr = sqrt(diag(Hinv)))
+#rownames(results) <- colnames(X2)
+#results <- round(results, 4)
 
 ## Display coefficients and standard errors
-results
+#results
 ```
 

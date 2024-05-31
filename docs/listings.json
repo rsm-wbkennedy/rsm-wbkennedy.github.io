@@ -4,8 +4,10 @@
     "items": [
       "/projects/project2/index.html",
       "/projects/project1/index.html",
+      "/projects/project3/index.html",
       "/projects/project2/hw2_questions.html",
-      "/projects/project1/hw1_questions.html"
+      "/projects/project1/hw1_questions.html",
+      "/projects/project3/hw3_questions.html"
     ]
   }
 ]
