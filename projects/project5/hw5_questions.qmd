@@ -1,0 +1,350 @@
+---
+title: "Segmentation Methods"
+author: "Warren Kennedy"
+date: today
+---
+
+
+## K-Means Clustering for Segmentation
+
+```{r}
+library(ggplot2)
+library(reshape2)
+library(cluster)
+library(factoextra)
+iris <- read.csv("~/My_Quarto_Website/projects/project5/iris.csv")
+irisX <- as.matrix(iris[, 1:4])
+```
+## What is KMeans Clustering?
+KMeans is a popular clustering algorithm that groups similar data points into clusters, aiming to create k clusters where points in each cluster are more similar to each other than to those in other clusters. The algorithm begins by randomly selecting k initial centroids, which serve as the starting points for forming clusters. These centroids influence how data points are grouped, and different initial centroids can result in different final clusters. To ensure the best clustering, the algorithm is often run multiple times with different initializations. We will explore this algorithm using the Iris flower dataset, which contains four measurements (sepal length, sepal width, petal length, and petal width) and the correct species for each flower. The dataset has three groups of flowers, and we will use the KMeans algorithm to see if we can accurately segment each flower into its appropriate group.
+
+### Step 1: Initialize the Centroids
+
+To begin the analysis, we randomly selects k points from the data as initial centroids. In this example, we will set the value for k to be 3, but we will use a generalized function in case we would like to run the analysis again with a different value.
+
+```{r}
+# Step 1: Initialize centroids
+set.seed(42)
+initialize_centroids <- function(data, k) {
+  indices <- sample(1:nrow(data), k, replace = FALSE)
+  return(data[indices, ])
+}
+```
+
+
+The plot below helps us see the starting positions of our centroids before the clustering process begins. It is worth noting that these 3 centroids are selected at random, so if we were to run the code again, the centroids would likely be placed in completely different regions of the plot.
+
+**Interpreting the plot:**
+Blue Points: Represent all the flowers in the dataset.
+Red Points: Represent the 3 randomly chosen initial centroids.
+
+```{r}
+# Visualize the initial centroids
+plot_initial_centroids <- function(data, centroids) {
+  df <- data.frame(data)
+  colnames(df) <- colnames(iris[, 1:4])
+  centroids_df <- data.frame(centroids)
+  colnames(centroids_df) <- colnames(iris[, 1:4])
+  p <- ggplot(df, aes(x = Sepal.Length, y = Sepal.Width)) +
+    geom_point(color = 'blue', size = 2) +
+    geom_point(data = centroids_df, aes(x = Sepal.Length, y = Sepal.Width), color = 'red', size = 4, shape = 8) +
+    ggtitle("Step 1: Creating the Initial Centroids") +
+    theme_minimal()
+  return(p)
+}
+
+# Applying Step 1: Initialize centroids
+k <- 3
+initial_centroids <- initialize_centroids(irisX, k)
+
+# Plotting initial centroids
+p <- plot_initial_centroids(irisX, initial_centroids)
+print(p)
+
+```
+
+### Step 2: Assigning Clusters
+Once we have our initial centroids, the next step is to assign each data point in our dataset to the nearest centroid, grouping the data points into clusters based on their proximity to the centroids. For each data point, we calculate the distance to each of the k centroids using the squared Euclidean distance, which measures the straight-line distance between two points in space. After calculating these distances, we assign each data point to the closest centroid, meaning each point joins the cluster of the nearest centroid.
+
+The result from step 2 will form k clusters as can be seen in the plot below.
+
+**Interpreting the plot:**
+Colored Points: Represent all the flowers in the dataset, colored by their assigned cluster.
+Red Points: Represent the 3 initial centroids.
+The plot helps us see how the flowers are grouped into clusters based on their proximity to the centroids.
+```{r}
+# Step 2: Assign clusters
+assign_clusters <- function(data, centroids) {
+  distances <- as.matrix(dist(rbind(centroids, data)))
+  distances <- distances[(nrow(centroids) + 1):nrow(distances), 1:nrow(centroids)]
+  return(apply(distances, 1, which.min))
+}
+```
+
+```{r}
+# Visualize the assigned clusters
+plot_assigned_clusters <- function(data, centroids, labels) {
+  df <- data.frame(data)
+  colnames(df) <- colnames(iris[, 1:4])
+  df$Cluster <- as.factor(labels)
+  centroids_df <- data.frame(centroids)
+  colnames(centroids_df) <- colnames(iris[, 1:4])
+  p <- ggplot(df, aes(x = Sepal.Length, y = Sepal.Width, color = Cluster)) +
+    geom_point(size = 2) +
+    geom_point(data = centroids_df, aes(x = Sepal.Length, y = Sepal.Width), color = 'red', size = 4, shape = 8) +
+    ggtitle("Step 2: Assigning Each Flower to the Nearest Cluster") +
+    theme_minimal()
+  return(p)
+}
+
+# Plotting assigned clusters
+p <- plot_assigned_clusters(irisX, initial_centroids, labels)
+print(p)
+```
+
+### Step 3: Updating Centroids
+After assigning the data points to clusters, we need to update the positions of the centroids to better represent the centers of their respective clusters. This involves calculating the new centroid for each cluster based on the current cluster assignments. For each cluster, we compute the mean ("K-*means*") position of all data points assigned to that cluster by averaging the values of each feature (e.g., sepal length, sepal width) for all points in the cluster. We then assign a new centroid for each cluster to this mean position, moving the centroid from its initial random position to a position that better represents the actual data points in the cluster. Updating the centroids provides a more accurate center for each cluster, which is crucial for improving the quality of the clusters and making them more reflective of the true structure of the data.
+
+**Interpretting the plot:**
+Colored Points: Represent all the flowers in the dataset, colored by their assigned cluster.
+Red Points: Represent the initial centroids.
+Green Points: Represent the updated centroids after recalculating their positions.
+The plot helps us see how the centroids have moved to better represent the centers of their respective clusters.
+```{r}
+# Step 3: Update centroids
+update_centroids <- function(data, labels, k) {
+  new_centroids <- matrix(0, nrow = k, ncol = ncol(data))
+  for (i in 1:k) {
+    new_centroids[i, ] <- colMeans(data[labels == i, ])
+  }
+  return(new_centroids)
+}
+new_centroids <- update_centroids(irisX, labels, k)
+```
+
+```{r}
+# Visualize the updated centroids
+plot_updated_centroids <- function(data, old_centroids, new_centroids, labels) {
+  df <- data.frame(data)
+  colnames(df) <- colnames(iris[, 1:4])
+  df$Cluster <- as.factor(labels)
+  
+  old_centroids_df <- data.frame(old_centroids)
+  colnames(old_centroids_df) <- colnames(iris[, 1:4])
+  
+  new_centroids_df <- data.frame(new_centroids)
+  colnames(new_centroids_df) <- colnames(iris[, 1:4])
+  
+  p <- ggplot(df, aes(x = Sepal.Length, y = Sepal.Width, color = Cluster)) +
+    geom_point(size = 2) +
+    geom_point(data = old_centroids_df, aes(x = Sepal.Length, y = Sepal.Width), color = 'red', size = 4, shape = 8) +
+    geom_point(data = new_centroids_df, aes(x = Sepal.Length, y = Sepal.Width), color = 'green', size = 4, shape = 17) +
+    ggtitle("Step 3: Updated Centroids") +
+    theme_minimal()
+  return(p)
+}
+
+# Plotting updated centroids
+p <- plot_updated_centroids(irisX, initial_centroids, new_centroids, labels)
+print(p)
+```
+
+## Step 4: Running the KMeans Algorithm
+
+We began our analysis by randomly selecting initial centroids, which can affect our results since the algorithm might find different final clusters based on these initial choices. This presents an issue because the final clusters may only be a local optimum—meaning they are the best clustering given the initial centroids, but not necessarily the best possible clustering overall (global optimum). Different runs of the algorithm with various initial centroids might produce different clusters, and some of these may not be the best overall solution but are the best given their starting points.
+
+In the final step of the KMeans algorithm, we address this issue by iteratively updating the centroids and reassigning data points to improve the clusters. This process continues until the centroids no longer move significantly or we reach a maximum number of iterations. Essentially, the process of assigning clusters and updating centroids is repeated until we achieve a stable solution or hit the iteration limit, helping to ensure the best possible clustering given the data.
+
+```{r}
+# Step 4: KMeans algorithm
+kmeans_final <- function(data, initial_centroids, max_iters = 100, tol = 1e-4) {
+  centroids <- initial_centroids
+  for (i in 1:max_iters) {
+    labels <- assign_clusters(data, centroids)
+    new_centroids <- update_centroids(data, labels, nrow(centroids))
+    if (sum(abs(new_centroids - centroids)) < tol) {
+      break
+    }
+    centroids <- new_centroids
+  }
+  return(list(centroids = centroids, labels = labels))
+}
+```
+
+**Interpreting the plot:**
+Colored Points: Represent all the flowers in the dataset, colored by their final assigned cluster.
+Red Points: Represent the final centroids after the algorithm has converged.
+The plot helps us see the final clusters and how the algorithm has grouped the flowers into these clusters.
+
+```{r}
+# Visualize the final clusters and centroids
+plot_final_clusters <- function(data, centroids, labels) {
+  df <- data.frame(data)
+  colnames(df) <- colnames(irisX)
+  df$Cluster <- as.factor(labels)
+  centroids_df <- data.frame(centroids)
+  colnames(centroids_df) <- colnames(irisX)
+  p <- ggplot(df, aes(x = Sepal.Length, y = Sepal.Width, color = Cluster)) +
+    geom_point(size = 2) +
+    geom_point(data = centroids_df, aes(x = Sepal.Length, y = Sepal.Width), color = 'red', size = 4, shape = 8) +
+    ggtitle("Final Clusters and Centroids") +
+    theme_minimal()
+  return(p)
+}
+
+# Apply KMeans function
+result <- kmeans_final(irisX, initial_centroids)
+final_centroids <- result$centroids
+final_labels <- result$labels
+
+# Plotting the final clusters and centroids
+p <- plot_final_clusters(irisX, final_centroids, final_labels)
+print(p)
+```
+
+### Comparing the results to actual values
+The comparison table below demonstrates the effectiveness of the KMeans clustering algorithm in grouping the Iris dataset into clusters. Cluster 1 contains all 50 Setosa flowers, showing that the algorithm successfully identified and grouped all Setosa flowers into a single cluster. Cluster 2 predominantly contains 47 Versicolor flowers, indicating that the algorithm accurately clustered most Versicolor flowers, with only 3 misclassifications. Cluster 3 includes 36 Virginica flowers, suggesting that while the algorithm correctly clustered the majority of Virginica flowers, 14 were misclassified. These results highlight the algorithm's ability to effectively distinguish Setosa flowers, though there is some overlap and misclassification between Versicolor and Virginica flowers.
+
+```{r}
+# Function to plot the data with centroids
+plot_kmeans <- function(data, centroids, labels, step) {
+  df <- data.frame(data)
+  df$cluster <- as.factor(labels)
+  centroids_df <- data.frame(centroids)
+  p <- ggplot(df, aes(x = Sepal.Length, y = Sepal.Width, color = cluster)) +
+    geom_point(size = 2) +
+    geom_point(data = centroids_df, aes(x = X1, y = X2), color = 'red', size = 4, shape = 8) +
+    ggtitle(paste("Step:", step)) +
+    theme_minimal()
+  return(p)
+}
+```
+
+```{r}
+# Assign the labels to the original iris dataset
+iris$cluster <- as.factor(final_labels)
+
+# Create a contingency table to compare clusters with actual species
+comparison_table <- table(Cluster = iris$cluster, Species = iris$Species)
+
+# Convert the table to a data frame for easier plotting
+comparison_df <- as.data.frame(comparison_table)
+colnames(comparison_df) <- c("cluster", "Species", "Count")
+
+# Create the bar plot
+p <- ggplot(comparison_df, aes(x = cluster, y = Count, fill = Species)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  ggtitle("Comparison of Clusters and Actual Species") +
+  xlab("Cluster") +
+  ylab("Count") +
+  theme_minimal()
+
+print(p)
+print(comparison_table)
+```
+### Comparing our result to R's built in `kmeans()` function
+The KMeans clustering results using the built-in `kmeans` function from the `stats` package showed similar outcomes to our custom implementation. Both methods successfully identified the Setosa species, clustering all 50 Setosa flowers into a single group. For the Versicolor species, both methods accurately grouped 47 out of 50 flowers, with 3 flowers misclassified. Similarly, for the Virginica species, both methods correctly clustered 36 out of 50 flowers, with the remaining 14 misclassified. The results are displayed in the visualizations below.
+
+```{r}
+# Run kmeans algorithm with an optimal number of clusters
+set.seed(42)
+kmeans_result <- stats::kmeans(irisX, centers = 3, nstart = 25)
+
+# Assign the cluster labels to the original iris dataset
+iris$Cluster <- as.factor(kmeans_result$cluster)
+
+# Create a contingency table to compare clusters with actual species
+comparison_table <- table(Cluster = iris$Cluster, Species = iris$Species)
+
+# Convert the table to a data frame for easier plotting
+comparison_df <- as.data.frame(comparison_table)
+colnames(comparison_df) <- c("Cluster", "Species", "Count")
+
+# Create the bar plot
+p <- ggplot(comparison_df, aes(x = Cluster, y = Count, fill = Species)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  ggtitle("Comparison of Clusters and Actual Species") +
+  xlab("Cluster") +
+  ylab("Count") +
+  theme_minimal()
+
+# Print the plot
+print(p)
+
+# Optionally, print the comparison table for reference
+print(comparison_table)
+```
+
+### The Within-Cluster-Sum-of-Squares Score
+The Within-Cluster Sum of Squares (WCSS) is a measure used to evaluate the quality of clustering. It calculates how closely data points in each cluster are to the cluster's center, known as the centroid. Specifically, WCSS is the sum of the squared distances between each data point and the centroid of its cluster. Lower WCSS values indicate that the data points are tightly grouped around their centroids, signifying well-defined clusters. Conversely, higher WCSS values suggest that the data points are spread out, indicating less effective clustering. By comparing WCSS values for different numbers of clusters, we can determine the most effective way to group the data.
+
+Based on the provided plot of the Within-Cluster Sum of Squares (WCSS) scores versus the number of clusters, the suggested number of clusters is indicated by the point where the WCSS starts to decrease more slowly. The plot below suggests that 3 clusters might be the optimal number for this dataset. This point is where adding more clusters does not result in a significant reduction in WCSS, indicating that the clusters are well-formed with 3 groups.
+
+```{r}
+# Function to compute WCSS
+wcss <- function(data, max_clusters) {
+  wcss_values <- numeric(max_clusters)
+  for (k in 1:max_clusters) {
+    kmeans_result <- stats::kmeans(data, centers = k, nstart = 25)
+    wcss_values[k] <- sum(kmeans_result$withinss)
+  }
+  return(wcss_values)
+}
+
+# Calculate WCSS and silhouette scores for up to 10 clusters
+max_clusters <- 10
+wcss_values <- wcss(irisX, max_clusters)
+
+# Create data frames for plotting
+wcss_df <- data.frame(Clusters = 1:max_clusters, WCSS = wcss_values)
+
+# Plot WCSS
+wcss_plot <- ggplot(wcss_df, aes(x = Clusters, y = WCSS)) +
+  geom_line() +
+  geom_point() +
+  ggtitle("Within-Cluster Sum of Squares Scores") +
+  xlab("Number of Clusters") +
+  ylab("WCSS (Within-Cluster Sum of Squares)") +
+  theme_minimal()
+
+
+# Print plots
+print(wcss_plot)
+```
+
+### The Silhouette Score
+The Silhouette score helps us find the best number of groups (clusters) by measuring how similar each data point is to its own cluster compared to other clusters. The silhouette score ranges from -1 to 1. A score close to 1 means the data point is well-matched to its cluster, while a score close to -1 means it might be in the wrong cluster. We calculate the average silhouette score for different numbers of clusters and look for the highest score. The number of clusters with the highest average silhouette score indicates the optimal grouping, as it suggests the data points are best clustered together.
+
+The suggested number of clusters is indicated by the point where the average silhouette score is the highest. The plot below suggests that 2 clusters might be the optimal number for this dataset. This is because the highest silhouette score indicates the best separation between the clusters, meaning the data points are well-matched to their own clusters and poorly matched to neighboring clusters at this point.
+
+
+```{r}
+# Function to compute silhouette scores
+silhouette_scores <- function(data, max_clusters) {
+  silhouette_values <- numeric(max_clusters)
+  for (k in 2:max_clusters) {  # Silhouette scores are not meaningful for k=1
+    kmeans_result <- stats::kmeans(data, centers = k, nstart = 25)
+    silhouette_avg <- silhouette(kmeans_result$cluster, dist(data))
+    silhouette_values[k] <- mean(silhouette_avg[, 3])
+  }
+  return(silhouette_values)
+}
+# Calculate silhouette score for up to 10 clusters
+max_clusters <- 10
+silhouette_values <- silhouette_scores(irisX, max_clusters)
+
+# Create data frames for plotting
+silhouette_df <- data.frame(Clusters = 2:max_clusters, Silhouette = silhouette_values[2:max_clusters])
+
+# Plot Silhouette Scores
+silhouette_plot <- ggplot(silhouette_df, aes(x = Clusters, y = Silhouette)) +
+  geom_line() +
+  geom_point() +
+  ggtitle("Silhouette Scores") +
+  xlab("Number of Clusters") +
+  ylab("Average Silhouette Score") +
+  theme_minimal()
+
+# Print plots
+print(silhouette_plot)
+```

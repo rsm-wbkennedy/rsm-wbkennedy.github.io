@@ -19,7 +19,7 @@ library(randomForest)
 
 
 ```{r}
-# Read data into data fram
+# Read data into data frame
 data <- read.csv("~/My_Quarto_Website/projects/project4/data_for_drivers_analysis.csv")
 ```
 
